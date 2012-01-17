@@ -1,107 +1,105 @@
-"""""""""""""""""""" GLOBAL
-let mapleader=","
-""colorscheme molokai
-set gfn=terminus
-set go= 
-
-syntax on
-filetype plugin indent on
+set nocompatible                " choose no compatibility with legacy vi
+syntax enable
 set encoding=utf-8
-set hidden
-set showcmd
-set nowrap
-set backspace=indent,eol,start
-set autoindent
-set copyindent
-set number
-set shiftround
+set showcmd                     " display incomplete commands
+filetype plugin indent on       " load file type plugins + indentation
+
+"" --- Plugins
+" Use pathogen to easily modify the runtime path to include all
+" plugins under the ~/.vim/bundle directory
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+
+"" --- Whitespace
+set nowrap                      " don't wrap lines
+set tabstop=2 shiftwidth=2      " a tab is two spaces (or set this to 4)
+set expandtab                   " use spaces, not tabs (optional)
+set backspace=indent,eol,start  " backspace through everything in insert mode
+
+"" --- Rebinds and helpers
+command! W :w
+let mapleader = ","
+
+"" remove arrow keys :trollface:
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+nnoremap j gj
+nnoremap k gk
+
+"" --- Searching
+set hlsearch                    " highlight matches
+set incsearch                   " incremental searching
+set ignorecase                  " searches are case insensitive...
+set smartcase                   " ... unless they contain at least one capital letter
+nnoremap / /\v
+vnoremap / /\v
 set ignorecase
 set smartcase
-set hlsearch
+set gdefault
 set incsearch
-set history=1000
-set undolevels=1000
-set wildignore=*.swp,*.bak
-set title
+set showmatch
+set hlsearch
+nnoremap <leader><space> :noh<cr>
+nnoremap <tab> %
+vnoremap <tab> %
+
+"" ack search
+nnoremap <leader>a :Ack
+
+"" css sort
+nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
+
+"" easier split (, + w)
+nnoremap <leader>w <C-w>v<C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+"" --- Status bar
+set cmdheight=2
+
+"" ---Files
+au BufNewFile,BufRead *.ejs set filetype=html.js
+au BufNewFile,BufRead *.jst set filetype=html.js
+au BufNewFile,BufRead *.less set filetype=less
+au BufNewFile,BufRead Guardfile set filetype=ruby
+
+"" misc
+set hidden
 set visualbell
-set noerrorbells
-set list
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
-set ttyfast
-set mouse=
-set nocompatible
-set backup
-set backupdir=~/.vim_backup
-set noswapfile
-set fileformats=unix,dos,mac
-set laststatus=2
-set expandtab
-set softtabstop=2 tabstop=2 shiftwidth=2
-set ruler
+set ignorecase 
+set smartcase
+set title
+set scrolloff=3
+set wildmode=list:longest
+set title
 
-"""""""""""""""""""" KEYBINDINGS
+"" faster scrolling
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
 
-map cc <leader>c<space>
-map  # {v}! par 72<CR>
-map  & {v}! par 72j<CR>
-map  <F6> :setlocal spell! spelllang=en<CR>
-map  <F12> :set invhls<CR>
-cmap <C-g> <C-u><ESC>
- 
-"""""""""""""""""""" PLUGINS
-call pathogen#infect()
- 
-"""""""""""""""""""" FILES SPECIFIC
- 
-au BufRead mutt-*        set ft=mail
-au BufRead mutt-*        set invhls
-au bufNewFile *.html 0r ~/.vim/templates/html.txt
-au BufRead,BufNewFile *.jsm setfiletype javascript
-au BufRead,BufNewFile *.xul setfiletype xml
- 
-autocmd filetype html,xml set listchars-=tab:>.
+"" GUI
+if has("gui_running")
+  set guioptions=egmrt "" hides toolbar
+endif
 
- """""""""""""""""""" STATUSBAR
- 
-hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
-hi Modified guibg=orange guifg=black ctermbg=lightred ctermfg=black
-hi PatchColor ctermfg=255 ctermbg=161 guifg=black guibg=#FF0066
- 
-function! MyStatusLine(mode)
-     let statusline=""
- 
-     if a:mode == 'Enter'
-         let statusline.="%#StatColor#"
-     endif
-     let statusline.="\(%n\)\ %f\ "
-     if a:mode == 'Enter'
-         let statusline.="%*"
-     endif
-     let statusline.="%#Modified#%m"
-     if a:mode == 'Leave'
-         let statusline.="%*%r"
-     elseif a:mode == 'Enter'
-         let statusline.="%r%*"
-     endif
-     let statusline .= "\ (%l/%L,\ %c)\ %P%=%h%w\ %y\ [%{&encoding}:%{&fileformat}]\ \ "
-    return statusline
- endfunction
- 
-au WinEnter * setlocal statusline=%!MyStatusLine('Enter')
-au WinLeave * setlocal statusline=%!MyStatusLine('Leave')
-set statusline=%!MyStatusLine('Enter')
- 
-function! InsertStatuslineColor(mode)
-  if a:mode == 'i'
-    hi StatColor guibg=orange ctermbg=lightred
-  elseif a:mode == 'r'
-    hi StatColor guibg=#e454ba ctermbg=magenta
-  elseif a:mode == 'v'
-    hi StatColor guibg=#e454ba ctermbg=magenta
-  else
-    hi StatColor guibg=red ctermbg=red
-  endif
-endfunction
+if &t_Co >= 256 || has("gui_running")
+endif
 
-au InsertEnter * call InsertStatuslineColor(v:insertmode)
-au InsertLeave * hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
+""colorscheme vwilight
+colorscheme mustang
+ 
+set guifont=Droid\ Sans\ Mono:h16
+set background=dark
+
+set guioptions-=L
+set guioptions-=r
+set number
+hi LineNr ctermfg=darkcyan ctermbg=black
