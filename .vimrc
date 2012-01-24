@@ -1,7 +1,8 @@
 "" -----= GLOBAL =-----
+set nocompatible " choose no compatibility with legacy vi
+
 let mapleader = ","
 
-"" GUI
 if has("gui_running")
   set guioptions=egmrt "" hides toolbar
 endif
@@ -15,9 +16,9 @@ set guioptions-=L
 set guioptions-=r
 set number
 hi LineNr ctermfg=darkcyan ctermbg=black
+set history=1000
 
 set laststatus=2
-set nocompatible                " choose no compatibility with legacy vi
 syntax on
 set encoding=utf-8
 set showcmd                     " display incomplete commands
@@ -37,7 +38,7 @@ map <Leader>n :NERDTreeToggle<CR>
 let g:CommandTMaxHeight=20
 
 " ZoomWin configuration
-" map <Leader><Leader> :ZoomWin<CR>
+map <Leader><Leader> :ZoomWin<CR>
 
 "" -----= WHITESPACE =----- ""
 set nowrap                      " don't wrap lines
@@ -46,6 +47,9 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab                   " use spaces, not tabs (optional)
 set backspace=indent,eol,start  " backspace through everything in insert mode
+set autoindent    " always set autoindenting on
+set copyindent    " copy the previous indentation on autoindenting
+
 
 "" -----= TAB COMPLETION =-----
 set wildmode=list:longest,list:full
@@ -53,6 +57,7 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*
 
 "" --- Rebinds and helpers
 command! W :w
+:imap jj <Esc>
 
 "" remove arrow keys :trollface:
 nnoremap <up> <nop>
@@ -145,9 +150,14 @@ au InsertLeave * hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen cterm
 au BufNewFile,BufRead *.ejs set filetype=html.js
 au BufNewFile,BufRead *.jst set filetype=html.js
 au BufNewFile,BufRead *.handlebars set filetype=html.js
+au BufNewFile,BufRead *.hbs set filetype=html.js
 au BufNewFile,BufRead *.less set filetype=less
 au BufNewFile,BufRead {Guardfile,Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set filetype=ruby
 au BufNewFile,BufRead *.json set filetype=javascript
+
+"" backup stuff
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 
 "" misc
 set hidden
@@ -157,10 +167,7 @@ set smartcase
 set title
 set scrolloff=3
 set wildmode=list:longest
-set title
 
 "" faster scrolling
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
-
-
