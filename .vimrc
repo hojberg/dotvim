@@ -1,4 +1,5 @@
-"" -----= GLOBAL =-----
+" =GENERAL
+" ===========================================================
 set nocompatible " choose no compatibility with legacy vi
 
 let mapleader = ","
@@ -24,21 +25,8 @@ set encoding=utf-8
 set showcmd                     " display incomplete commands
 filetype plugin indent on       " load file type plugins + indentation
 
-"" -----= PLUGINS =----- 
-" Use pathogen to easily modify the runtime path to include all
-" plugins under the ~/.vim/bundle directory
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
-
-" NERDTree configuration
-let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
-map <Leader>n :NERDTreeToggle<CR>
-
-" Command-T configuration
-let g:CommandTMaxHeight=20
-
-" ZoomWin configuration
-map <Leader><Leader> :ZoomWin<CR>
+" Set to auto read when a file is changed from the outside
+set autoread
 
 "" -----= WHITESPACE =----- ""
 set nowrap                      " don't wrap lines
@@ -58,6 +46,7 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*
 "" --- Rebinds and helpers
 command! W :w
 :imap jj <Esc>
+:nmap ; :
 
 "" remove arrow keys :trollface:
 nnoremap <up> <nop>
@@ -101,50 +90,53 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" run yeti on current file
+nnoremap <leader>y :! yeti %<cr>
+
 "" --- Status bar
-set cmdheight=2
-hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
-hi Modified guibg=orange guifg=black ctermbg=lightred ctermfg=black
-hi PatchColor ctermfg=255 ctermbg=161 guifg=black guibg=#FF0066
+"set cmdheight=2
+"hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
+"hi Modified guibg=orange guifg=black ctermbg=lightred ctermfg=black
+"hi PatchColor ctermfg=255 ctermbg=161 guifg=black guibg=#FF0066
 
-function! MyStatusLine(mode)
-  let statusline=""
+"function! MyStatusLine(mode)
+"  let statusline=""
 
-  if a:mode == 'Enter'
-      let statusline.="%#StatColor#"
-  endif
-  let statusline.="\(%n\)\ %f\ "
-  if a:mode == 'Enter'
-      let statusline.="%*"
-  endif
-  let statusline.="%#Modified#%m"
-  if a:mode == 'Leave'
-      let statusline.="%*%r"
-  elseif a:mode == 'Enter'
-      let statusline.="%r%*"
-  endif
-  let statusline .= "\ (%l/%L,\ %c)\ %P%=%h%w\ %y\ [%{&encoding}:%{&fileformat}]\ \ "
-  return statusline
-endfunction
+"  if a:mode == 'Enter'
+"      let statusline.="%#StatColor#"
+"  endif
+"  let statusline.="\(%n\)\ %f\ "
+"  if a:mode == 'Enter'
+"      let statusline.="%*"
+"  endif
+"  let statusline.="%#Modified#%m"
+"  if a:mode == 'Leave'
+"      let statusline.="%*%r"
+"  elseif a:mode == 'Enter'
+"      let statusline.="%r%*"
+"  endif
+"  let statusline .= "\ (%l/%L,\ %c)\ %P%=%h%w\ %y\ [%{&encoding}:%{&fileformat}]\ \ "
+"  return statusline
+"endfunction
 
-au WinEnter * setlocal statusline=%!MyStatusLine('Enter')
-au WinLeave * setlocal statusline=%!MyStatusLine('Leave')
-set statusline=%!MyStatusLine('Enter')
+"au WinEnter * setlocal statusline=%!MyStatusLine('Enter')
+"au WinLeave * setlocal statusline=%!MyStatusLine('Leave')
+"set statusline=%!MyStatusLine('Enter')
  
-function! InsertStatuslineColor(mode)
-  if a:mode == 'i'
-    hi StatColor guibg=orange ctermbg=lightred
-  elseif a:mode == 'r'
-    hi StatColor guibg=#e454ba ctermbg=magenta
-  elseif a:mode == 'v'
-    hi StatColor guibg=#e454ba ctermbg=magenta
-  else
-    hi StatColor guibg=red ctermbg=red
-  endif
-endfunction
+"function! InsertStatuslineColor(mode)
+"  if a:mode == 'i'
+"    hi StatColor guibg=orange ctermbg=lightred
+"  elseif a:mode == 'r'
+"    hi StatColor guibg=#e454ba ctermbg=magenta
+"  elseif a:mode == 'v'
+"    hi StatColor guibg=#e454ba ctermbg=magenta
+"  else
+"    hi StatColor guibg=red ctermbg=red
+"  endif
+"endfunction
 
-au InsertEnter * call InsertStatuslineColor(v:insertmode)
-au InsertLeave * hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
+"au InsertEnter * call InsertStatuslineColor(v:insertmode)
+"au InsertLeave * hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
 
 "" ---Files
 au BufNewFile,BufRead *.ejs set filetype=html.js
@@ -171,3 +163,24 @@ set wildmode=list:longest
 "" faster scrolling
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
+
+" =PLUGIN_CONFIG (with pathogen(
+" ===========================================================
+
+" Use pathogen to easily modify the runtime path to include all
+" plugins under the ~/.vim/bundle directory
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
+
+" powerline config
+" let g:Powerline_symbols = 'fancy'
+
+" NERDTree configuration
+let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
+map <Leader>n :NERDTreeToggle<CR>
+
+" Command-T configuration
+let g:CommandTMaxHeight=20
+
+" ZoomWin configuration
+map <Leader><Leader> :ZoomWin<CR>
