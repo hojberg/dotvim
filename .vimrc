@@ -175,10 +175,6 @@ call pathogen#runtime_append_all_bundles()
 " powerline config
 " let g:Powerline_symbols = 'fancy'
 
-" NERDTree configuration
-let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
-map <Leader>n :NERDTreeToggle<CR>
-
 " Command-T configuration
 let g:CommandTMaxHeight=20
 
