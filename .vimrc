@@ -1,54 +1,78 @@
-" =GENERAL
-" ===========================================================
-set nocompatible " choose no compatibility with legacy vi
+" Basic ------------------------------------ "
+set nocompatible
+set number
+set history=1000
+set laststatus=2
+set encoding=utf-8
+set showcmd
+set autoread
+set hidden
+set visualbell
+set title
+set scrolloff=3
 
+" Resize splits when the window is resized
+au VimResized * :wincmd =
+
+" <leader> ------------------------------------ "
 let mapleader = ","
 
-if has("gui_running")
-  set guioptions=egmrt "" hides toolbar
-endif
-
-colorscheme mustang
- 
-set guifont=Droid\ Sans\ Mono:h16
-set background=dark
-
-set guioptions-=L
-set guioptions-=r
-set number
-hi LineNr ctermfg=darkcyan ctermbg=black
-set history=1000
-
-set laststatus=2
-syntax on
-set encoding=utf-8
-set showcmd                     " display incomplete commands
-filetype plugin indent on       " load file type plugins + indentation
-
-" Set to auto read when a file is changed from the outside
-set autoread
-
-"" -----= WHITESPACE =----- ""
+" Whitespace ------------------------------------ "
 set nowrap                      " don't wrap lines
 set tabstop=2 
 set shiftwidth=2     
 set softtabstop=2
 set expandtab                   " use spaces, not tabs (optional)
 set backspace=indent,eol,start  " backspace through everything in insert mode
-set autoindent    " always set autoindenting on
-set copyindent    " copy the previous indentation on autoindenting
+set autoindent                  " always set autoindenting on
+set copyindent                  " copy the previous indentation on autoindenting
 
-
-"" -----= TAB COMPLETION =-----
-set wildmode=list:longest,list:full
+" Wildmode ------------------------------------ "
+set wildmode=list:longest
 set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*
 
-"" --- Rebinds and helpers
+" Tab key ------------------------------------ "
+" Indent if we're at the beginning of a line. Else, do completion.
+function! InsertTabWrapper()
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    else
+        return "\<c-p>"
+    endif
+endfunction
+inoremap <tab> <c-r>=InsertTabWrapper()<cr>
+inoremap <s-tab> <c-n>
+
+" Search ------------------------------------ "
+set hlsearch                    " highlight matches
+set incsearch                   " incremental searching
+set ignorecase                  " searches are case insensitive...
+set smartcase                   " ... unless they contain at least one capital letter
+set ignorecase
+set smartcase
+set gdefault
+set incsearch
+set showmatch
+set hlsearch
+" ,<space> clears search
+nnoremap <leader><space> :noh<cr> 
+
+" Rebinds ------------------------------------ "
 command! W :w
 :imap jj <Esc>
 :nmap ; :
 
-"" remove arrow keys :trollface:
+" Yank to OS X pasteboard.
+noremap <leader>y "*y
+" Paste from OS X pasteboard without messing up indent.
+noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
+noremap <leader>P :set paste<CR>:put! *<CR>:set nopaste<CR>
+
+" In command-line mode, C-a jumps to beginning (to match C-e).
+cnoremap <C-a> <Home>
+
+" Navigation ------------------------------------ "
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -59,86 +83,25 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 nnoremap j gj
 nnoremap k gk
-
-"" --- Searching
-set hlsearch                    " highlight matches
-set incsearch                   " incremental searching
-set ignorecase                  " searches are case insensitive...
-set smartcase                   " ... unless they contain at least one capital letter
-nnoremap / /\v
-vnoremap / /\v
-set ignorecase
-set smartcase
-set gdefault
-set incsearch
-set showmatch
-set hlsearch
-nnoremap <leader><space> :noh<cr>
-nnoremap <tab> %
-vnoremap <tab> %
-
-"" ack search
-nnoremap <leader>a :Ack
-
-"" css sort
-nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
-
-"" easier split (, + w)
+" easier split (, + w)
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" run yeti on current file
-nnoremap <leader>y :! yeti %<cr>
+" Line return ------------------------------------ "
+" Make sure Vim returns to the same line when you reopen a file.
+" Thanks, Amit
+augroup line_return
+    au!
+    au BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \     execute 'normal! g`"zvzz' |
+        \ endif
+augroup END
 
-"" --- Status bar
-"set cmdheight=2
-"hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
-"hi Modified guibg=orange guifg=black ctermbg=lightred ctermfg=black
-"hi PatchColor ctermfg=255 ctermbg=161 guifg=black guibg=#FF0066
-
-"function! MyStatusLine(mode)
-"  let statusline=""
-
-"  if a:mode == 'Enter'
-"      let statusline.="%#StatColor#"
-"  endif
-"  let statusline.="\(%n\)\ %f\ "
-"  if a:mode == 'Enter'
-"      let statusline.="%*"
-"  endif
-"  let statusline.="%#Modified#%m"
-"  if a:mode == 'Leave'
-"      let statusline.="%*%r"
-"  elseif a:mode == 'Enter'
-"      let statusline.="%r%*"
-"  endif
-"  let statusline .= "\ (%l/%L,\ %c)\ %P%=%h%w\ %y\ [%{&encoding}:%{&fileformat}]\ \ "
-"  return statusline
-"endfunction
-
-"au WinEnter * setlocal statusline=%!MyStatusLine('Enter')
-"au WinLeave * setlocal statusline=%!MyStatusLine('Leave')
-"set statusline=%!MyStatusLine('Enter')
- 
-"function! InsertStatuslineColor(mode)
-"  if a:mode == 'i'
-"    hi StatColor guibg=orange ctermbg=lightred
-"  elseif a:mode == 'r'
-"    hi StatColor guibg=#e454ba ctermbg=magenta
-"  elseif a:mode == 'v'
-"    hi StatColor guibg=#e454ba ctermbg=magenta
-"  else
-"    hi StatColor guibg=red ctermbg=red
-"  endif
-"endfunction
-
-"au InsertEnter * call InsertStatuslineColor(v:insertmode)
-"au InsertLeave * hi StatColor guibg=#95e454 guifg=black ctermbg=lightgreen ctermfg=black
-
-"" ---Files
+" Files ------------------------------------ "
 au BufNewFile,BufRead *.ejs set filetype=html.js
 au BufNewFile,BufRead *.jst set filetype=html.js
 au BufNewFile,BufRead *.handlebars set filetype=html.js
@@ -147,36 +110,149 @@ au BufNewFile,BufRead *.less set filetype=less
 au BufNewFile,BufRead {Guardfile,Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set filetype=ruby
 au BufNewFile,BufRead *.json set filetype=javascript
 
-"" backup stuff
+" Backup ------------------------------------ "
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set noswapfile     " no swap files
 
-"" misc
-set hidden
-set visualbell
-set ignorecase 
-set smartcase
-set title
-set scrolloff=3
-set wildmode=list:longest
-
-"" faster scrolling
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
-
-" =PLUGIN_CONFIG (with pathogen(
-" ===========================================================
+" Plugins ------------------------------------ "
+filetype plugin indent on       " load file type plugins + indentation
 
 " Use pathogen to easily modify the runtime path to include all
 " plugins under the ~/.vim/bundle directory
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
 
-" powerline config
-" let g:Powerline_symbols = 'fancy'
+"" Ack
+nnoremap <leader>a :Ack
 
-" Command-T configuration
-let g:CommandTMaxHeight=20
+" powerline config
+let g:Powerline_symbols = 'fancy'
+
+" nerdtree
+let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
+map <Leader>n :NERDTreeToggle<CR>
+
+" Ctrl-P
+let g:ctrlp_dont_split = 'NERD_tree_2'
+let g:ctrlp_jump_to_buffer = 0
+let g:ctrlp_map = '<leader>.'
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_match_window_reversed = 1
+let g:ctrlp_split_window = 0
+let g:ctrlp_max_height = 20
+let g:ctrlp_extensions = ['tag']
+
+let g:ctrlp_prompt_mappings = {
+\ 'PrtSelectMove("j")':   ['<c-j>', '<down>', '<s-tab>'],
+\ 'PrtSelectMove("k")':   ['<c-k>', '<up>', '<tab>'],
+\ 'PrtHistory(-1)':       ['<c-n>'],
+\ 'PrtHistory(1)':        ['<c-p>'],
+\ 'ToggleFocus()':        ['<c-tab>'],
+\ }
+
+let ctrlp_filter_greps = "".
+    \ "egrep -iv '\\.(" .
+    \ "jar|class|swp|swo|log|so|o|pyc|jpe?g|png|gif|mo|po" .
+    \ ")$' | " .
+    \ "egrep -v '^(\\./)?(" .
+    \ "deploy/|lib/|classes/|libs/|deploy/vendor/|.git/|.hg/|.svn/|.*migrations/" .
+    \ ")'"
+
+let my_ctrlp_user_command = "" .
+    \ "find %s '(' -type f -or -type l ')' -maxdepth 15 -not -path '*/\\.*/*' | " .
+    \ ctrlp_filter_greps
+
+let my_ctrlp_git_command = "" .
+    \ "cd %s && git ls-files | " .
+    \ ctrlp_filter_greps
+
+let g:ctrlp_user_command = ['.git/', my_ctrlp_git_command, my_ctrlp_user_command]
+
+nnoremap <leader>. :CtrlPTag<cr>
 
 " ZoomWin configuration
 map <Leader><Leader> :ZoomWin<CR>
+
+" Rename file with ,n ---------------------------- "
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <leader>n :call RenameFile()<cr>
+
+" Test runner ------------------------------------ "
+map <leader>t :call RunTestFile()<cr>
+" map <leader>Y :call RunNearestTest()<cr>
+" map <leader>a :call RunTests('')<cr>
+" map <leader>c :w\|:!script/features<cr>
+" map <leader>w :w\|:!script/features --profile wip<cr>
+
+function! RunTestFile(...)
+    if a:0
+        let command_suffix = a:1
+    else
+        let command_suffix = ""
+    endif
+
+    " Run the tests for the previously-marked file.
+    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_test.html\|_spec.js\)$') != -1
+    if in_test_file
+        call SetTestFile()
+    elseif !exists("t:grb_test_file")
+        return
+    end
+    call RunTests(t:grb_test_file . command_suffix)
+endfunction
+
+function! RunNearestTest()
+    let spec_line_number = line('.')
+    call RunTestFile(":" . spec_line_number . " -b")
+endfunction
+
+function! SetTestFile()
+    " Set the spec file that tests will be run for.
+    let t:grb_test_file=@%
+endfunction
+
+function! RunTests(filename)
+    " Write the file and run tests for the given filename
+    :w
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+    if match(a:filename, '\.feature$') != -1
+        exec ":!script/features " . a:filename
+    elseif match(a:filename, '\.html$') != -1
+      exec ":!yeti " . a:filename
+    else
+        if filereadable("script/test")
+            exec ":!script/test " . a:filename
+        elseif filereadable("Gemfile")
+            exec ":!bundle exec rspec --color " . a:filename
+        else
+            exec ":!rspec --color " . a:filename
+        end
+    end
+endfunction
+
+" Color ------------------------------------ "
+syntax on
+colorscheme mustang
+hi LineNr ctermfg=darkcyan ctermbg=black
+
+" gui vim ------------------------------------- "
+if has("gui_running")
+  set guioptions=egmrt "" hides toolbar
+  " set guifont=Droid\ Sans\ Mono\ Dotted\ for\ Powerline:h16
+  set guifont=Inconsolata-dz\ for\ Powerline:h16
+  set guioptions-=L
+  set guioptions-=r
+endif

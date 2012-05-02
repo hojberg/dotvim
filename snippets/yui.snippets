@@ -1,0 +1,28 @@
+# YUI.add
+snippet yadd
+	YUI.add(${1:module_name}, function (Y) {
+
+		${2:// body...}
+
+	}, '0.0.1', { requires: ['${3:dependencies}']);
+
+# YUI.add class
+snippet yaddc
+	YUI.add(${1:module_name}, function (Y) {
+		
+		/**
+		@class ${2:class_name}
+		@description ${3:// description...}
+		@namespace ${4:namespace}
+		@extends ${5:extends}
+		**/
+		Y.namespace(''). = Y.Base.create('.', Y., [], {
+			${8:// body...}
+		}, 
+		{
+			ATTRS: {
+				${7:// attributess...}
+			}
+		});
+
+	}, '0.0.1', { requires: ['${6:dependencies}']);
