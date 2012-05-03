@@ -183,7 +183,7 @@ function! RenameFile()
         redraw!
     endif
 endfunction
-map <leader>n :call RenameFile()<cr>
+"map <leader>rn :call RenameFile()<cr>
 
 " Test runner ------------------------------------ "
 map <leader>t :call RunTestFile()<cr>
@@ -251,8 +251,7 @@ hi LineNr ctermfg=darkcyan ctermbg=black
 " gui vim ------------------------------------- "
 if has("gui_running")
   set guioptions=egmrt "" hides toolbar
-  " set guifont=Droid\ Sans\ Mono\ Dotted\ for\ Powerline:h16
-  set guifont=Inconsolata-dz\ for\ Powerline:h16
+  set guifont=Droid\ Sans\ Mono\ Dotted\ for\ Powerline:h16
   set guioptions-=L
   set guioptions-=r
 endif
