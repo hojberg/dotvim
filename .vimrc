@@ -118,12 +118,16 @@ set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set noswapfile     " no swap files
 
 " Plugins ------------------------------------ "
+
 filetype plugin indent on       " load file type plugins + indentation
 
 " Use pathogen to easily modify the runtime path to include all
 " plugins under the ~/.vim/bundle directory
 call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
+
+" add local plugins for hacking
+" call pathogen#runtime_prepend_subdirectories('/Users/hojberg/code/vim/')
 
 "" Ack
 nnoremap <leader>a :Ack
@@ -177,8 +181,12 @@ nnoremap <leader>. :CtrlPTag<cr>
 map <leader><leader> :ZoomWin<cr>
 
 " Vest
-let g:vest_runners['_test.html'] = 'yeti %'
-map <leader>t :call Vest()<cr>
+let g:vest_runners = { 
+  \ '_spec.rb':   'bundle exec rspec %', 
+  \ '.feature':   'bundle exec rake cucumber FEATURE=%',
+  \ '_test.html': 'yeti %'
+  \ }
+map <leader>t :Vest<cr>
 
 " Rename file with ,n ---------------------------- "
 function! RenameFile()
