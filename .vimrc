@@ -58,7 +58,7 @@ set hlsearch
 " ,<space> clears search
 nnoremap <leader><space> :noh<cr> 
 
-" Rebinds ------------------------------------ "
+" Mappings ------------------------------------ "
 command! W :w
 :imap jj <Esc>
 :nmap ; :
@@ -71,6 +71,9 @@ noremap <leader>P :set paste<CR>:put! *<CR>:set nopaste<CR>
 
 " In command-line mode, C-a jumps to beginning (to match C-e).
 cnoremap <C-a> <Home>
+
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " Navigation ------------------------------------ "
 nnoremap <up> <nop>
@@ -171,7 +174,11 @@ let g:ctrlp_user_command = ['.git/', my_ctrlp_git_command, my_ctrlp_user_command
 nnoremap <leader>. :CtrlPTag<cr>
 
 " ZoomWin configuration
-map <Leader><Leader> :ZoomWin<CR>
+map <leader><leader> :ZoomWin<cr>
+
+" Vest
+let g:vest_runners['_test.html'] = 'yeti %'
+map <leader>t :call Vest()<cr>
 
 " Rename file with ,n ---------------------------- "
 function! RenameFile()
@@ -183,65 +190,7 @@ function! RenameFile()
         redraw!
     endif
 endfunction
-"map <leader>rn :call RenameFile()<cr>
-
-" Test runner ------------------------------------ "
-map <leader>t :call RunTestFile()<cr>
-" map <leader>Y :call RunNearestTest()<cr>
-" map <leader>a :call RunTests('')<cr>
-" map <leader>c :w\|:!script/features<cr>
-" map <leader>w :w\|:!script/features --profile wip<cr>
-
-function! RunTestFile(...)
-    if a:0
-        let command_suffix = a:1
-    else
-        let command_suffix = ""
-    endif
-
-    " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\|_test.html\|_spec.js\)$') != -1
-    if in_test_file
-        call SetTestFile()
-    elseif !exists("t:grb_test_file")
-        return
-    end
-    call RunTests(t:grb_test_file . command_suffix)
-endfunction
-
-function! RunNearestTest()
-    let spec_line_number = line('.')
-    call RunTestFile(":" . spec_line_number . " -b")
-endfunction
-
-function! SetTestFile()
-    " Set the spec file that tests will be run for.
-    let t:grb_test_file=@%
-endfunction
-
-function! RunTests(filename)
-    " Write the file and run tests for the given filename
-    :w
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    if match(a:filename, '\.feature$') != -1
-        exec ":!script/features " . a:filename
-    elseif match(a:filename, '\.html$') != -1
-      exec ":!yeti " . a:filename
-    else
-        if filereadable("script/test")
-            exec ":!script/test " . a:filename
-        elseif filereadable("Gemfile")
-            exec ":!bundle exec rspec --color " . a:filename
-        else
-            exec ":!rspec --color " . a:filename
-        end
-    end
-endfunction
+map <leader>rn :call RenameFile()<cr>
 
 " Color ------------------------------------ "
 syntax on
