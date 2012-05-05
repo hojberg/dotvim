@@ -178,7 +178,7 @@ let g:ctrlp_user_command = ['.git/', my_ctrlp_git_command, my_ctrlp_user_command
 nnoremap <leader>. :CtrlPTag<cr>
 
 " ZoomWin configuration
-map <leader><leader> :ZoomWin<cr>
+nnoremap <leader><leader> :ZoomWin<cr>
 
 " Vest
 let g:vest_runners = { 
@@ -186,7 +186,7 @@ let g:vest_runners = {
   \ '.feature':   'bundle exec rake cucumber FEATURE=%',
   \ '_test.html': 'yeti %'
   \ }
-map <leader>t :Vest<cr>
+nnoremap <leader>t :Vest<cr>
 
 " Rename file with ,n ---------------------------- "
 function! RenameFile()
@@ -198,7 +198,7 @@ function! RenameFile()
         redraw!
     endif
 endfunction
-map <leader>rn :call RenameFile()<cr>
+nnoremap <leader>rn :call RenameFile()<cr>
 
 " Color ------------------------------------ "
 syntax on
