@@ -10,9 +10,13 @@ set hidden
 set visualbell
 set title
 set scrolloff=3
+set cmdheight=2
 
 " Resize splits when the window is resized
 au VimResized * :wincmd =
+
+" Colorcolumn
+set cc=72
 
 " <leader> ------------------------------------ "
 let mapleader = ","
@@ -30,19 +34,6 @@ set copyindent                  " copy the previous indentation on autoindenting
 " Wildmode ------------------------------------ "
 set wildmode=list:longest
 set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*
-
-" Tab key ------------------------------------ "
-" Indent if we're at the beginning of a line. Else, do completion.
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
-endfunction
-inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-inoremap <s-tab> <c-n>
 
 " Search ------------------------------------ "
 set hlsearch                    " highlight matches
@@ -84,8 +75,7 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
-nnoremap j gj
-nnoremap k gk
+
 " easier split (, + w)
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <C-h> <C-w>h
@@ -127,53 +117,31 @@ call pathogen#helptags()
 call pathogen#runtime_append_all_bundles()
 
 " add local plugins for hacking
-" call pathogen#runtime_prepend_subdirectories('/Users/hojberg/code/vim/')
+call pathogen#runtime_prepend_subdirectories('/Users/hojberg/code/vim/')
 
-"" Ack
+" Ack
 nnoremap <leader>a :Ack
+
+" TagBar
+nnoremap <F8> :TagbarToggle<CR>
 
 " powerline config
 let g:Powerline_symbols = 'fancy'
+let g:Powerline_stl_path_style = 'short'
 
 " nerdtree
 let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
-map <Leader>n :NERDTreeToggle<CR>
+nnoremap <Leader>n :NERDTreeToggle<CR>
 
 " Ctrl-P
 let g:ctrlp_dont_split = 'NERD_tree_2'
 let g:ctrlp_jump_to_buffer = 0
 let g:ctrlp_map = '<leader>.'
 let g:ctrlp_working_path_mode = 0
-let g:ctrlp_match_window_reversed = 1
+let g:ctrlp_match_window_reversed = 0
+let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_split_window = 0
-let g:ctrlp_max_height = 20
-let g:ctrlp_extensions = ['tag']
-
-let g:ctrlp_prompt_mappings = {
-\ 'PrtSelectMove("j")':   ['<c-j>', '<down>', '<s-tab>'],
-\ 'PrtSelectMove("k")':   ['<c-k>', '<up>', '<tab>'],
-\ 'PrtHistory(-1)':       ['<c-n>'],
-\ 'PrtHistory(1)':        ['<c-p>'],
-\ 'ToggleFocus()':        ['<c-tab>'],
-\ }
-
-let ctrlp_filter_greps = "".
-    \ "egrep -iv '\\.(" .
-    \ "jar|class|swp|swo|log|so|o|pyc|jpe?g|png|gif|mo|po" .
-    \ ")$' | " .
-    \ "egrep -v '^(\\./)?(" .
-    \ "deploy/|lib/|classes/|libs/|deploy/vendor/|.git/|.hg/|.svn/|.*migrations/" .
-    \ ")'"
-
-let my_ctrlp_user_command = "" .
-    \ "find %s '(' -type f -or -type l ')' -maxdepth 15 -not -path '*/\\.*/*' | " .
-    \ ctrlp_filter_greps
-
-let my_ctrlp_git_command = "" .
-    \ "cd %s && git ls-files | " .
-    \ ctrlp_filter_greps
-
-let g:ctrlp_user_command = ['.git/', my_ctrlp_git_command, my_ctrlp_user_command]
+let g:ctrlp_max_height = 10
 
 nnoremap <leader>. :CtrlPTag<cr>
 
@@ -183,12 +151,12 @@ nnoremap <leader><leader> :ZoomWin<cr>
 " Vest
 let g:vest_runners = { 
   \ '_spec.rb':   'bundle exec rspec %', 
-  \ '.feature':   'bundle exec rake cucumber FEATURE=%',
-  \ '_test.html': 'yeti %'
+  \ '.feature':   'bundle exec cucumber %',
+  \ '_spec.js':   'mocha %'
   \ }
 nnoremap <leader>t :Vest<cr>
 
-" Rename file with ,n ---------------------------- "
+" Rename file with ,rn ---------------------------- "
 function! RenameFile()
     let old_name = expand('%')
     let new_name = input('New file name: ', expand('%'), 'file')
@@ -203,7 +171,6 @@ nnoremap <leader>rn :call RenameFile()<cr>
 " Color ------------------------------------ "
 syntax on
 colorscheme mustang
-hi LineNr ctermfg=darkcyan ctermbg=black
 
 " gui vim ------------------------------------- "
 if has("gui_running")
@@ -211,4 +178,7 @@ if has("gui_running")
   set guifont=Droid\ Sans\ Mono\ Dotted\ for\ Powerline:h16
   set guioptions-=L
   set guioptions-=r
+else
+  " set proper colors for terminal vim
+  set t_Co=256
 endif
