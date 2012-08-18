@@ -152,7 +152,7 @@ nnoremap <leader><leader> :ZoomWin<cr>
 let g:vest_runners = { 
   \ '_spec.rb':   'bundle exec rspec %', 
   \ '.feature':   'bundle exec cucumber %',
-  \ '_spec.js':   'mocha %'
+  \ '_spec.js':   'grunt jasmine'
   \ }
 nnoremap <leader>t :Vest<cr>
 
@@ -171,6 +171,7 @@ nnoremap <leader>rn :call RenameFile()<cr>
 " Color ------------------------------------ "
 syntax on
 colorscheme mustang
+" colorscheme hojberg
 
 " gui vim ------------------------------------- "
 if has("gui_running")
