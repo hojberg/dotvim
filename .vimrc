@@ -102,6 +102,7 @@ au BufNewFile,BufRead *.hbs set filetype=html.js
 au BufNewFile,BufRead *.less set filetype=less
 au BufNewFile,BufRead {Guardfile,Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set filetype=ruby
 au BufNewFile,BufRead *.json set filetype=javascript
+au BufNewFile,BufRead *.clj,*cljs set filetype=clojure
 
 " Backup ------------------------------------ "
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
@@ -109,7 +110,7 @@ set noswapfile     " no swap files
 
 " Plugins ------------------------------------ "
 
-filetype plugin indent on       " load file type plugins + indentation
+filetype plugin indent on " load file type plugins + indentation
 
 " Use pathogen to easily modify the runtime path to include all
 " plugins under the ~/.vim/bundle directory
@@ -120,7 +121,11 @@ call pathogen#runtime_append_all_bundles()
 call pathogen#runtime_prepend_subdirectories('/Users/hojberg/code/vim/')
 
 " Ack
-nnoremap <leader>a :Ack
+" nnoremap <leader>a :Ack
+set grepprg=ack
+nnoremap <leader>a :Ack<space>
+let g:ackhighlight=1
+let g:ackprg="ack -H --type-set jade=.jade --type-set stylus=.styl --type-set coffee=.coffee --nocolor --nogroup --column --ignore-dir=node_modules -G '^((?!min\.).)*$'"
 
 " TagBar
 nnoremap <F8> :TagbarToggle<CR>
@@ -142,7 +147,7 @@ let g:ctrlp_match_window_reversed = 0
 let g:ctrlp_clear_cache_on_exit = 1
 let g:ctrlp_split_window = 0
 let g:ctrlp_max_height = 10
-
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 nnoremap <leader>. :CtrlPTag<cr>
 
 " ZoomWin configuration
@@ -156,6 +161,23 @@ let g:vest_runners = {
   \ }
 nnoremap <leader>t :Vest<cr>
 
+" VimClojure
+let g:vimclojure#HighlightBuiltins = 1
+let g:vimclojure#ParenRainbow = 1
+
+" GoldenRatio
+let g:loaded_golden_ratio = 1
+
+" RainbowBrackets
+"let g:rainbowbrackets_enable_round_brackets = 1
+"let g:rainbowbrackets_enable_curly_brackets = 1
+"let g:rainbowbrackets_enable_square_brackets = 0
+"let g:rainbowbrackets_enable_angle_brackets = 0
+"augroup vimrc-rainbowbrackets
+"    autocmd!
+"    autocmd FileType javascript let b:rainbowbrackets_enable_curly_brackets = 1
+"augroup END
+
 " Rename file with ,rn ---------------------------- "
 function! RenameFile()
     let old_name = expand('%')
@@ -168,15 +190,21 @@ function! RenameFile()
 endfunction
 nnoremap <leader>rn :call RenameFile()<cr>
 
+" Highlight end of line whitespace.
+highlight ExtraWhitespace ctermbg=red guibg=red
+au ColorScheme * highlight ExtraWhitespace guibg=red
+au BufEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhiteSpace /\s\+$/
+
 " Color ------------------------------------ "
 syntax on
 colorscheme mustang
-" colorscheme hojberg
 
 " gui vim ------------------------------------- "
 if has("gui_running")
   set guioptions=egmrt "" hides toolbar
-  set guifont=Droid\ Sans\ Mono\ Dotted\ for\ Powerline:h16
+  set guifont=Droid\ Sans\ Mono\ Dotted\ for\ Powerline:h18
   set guioptions-=L
   set guioptions-=r
 else
