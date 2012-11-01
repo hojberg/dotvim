@@ -106,7 +106,7 @@ au BufNewFile,BufRead *.clj,*cljs set filetype=clojure
 
 " Backup ------------------------------------ "
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-set noswapfile     " no swap files
+set noswapfile " no swap files
 
 " Plugins ------------------------------------ "
 
@@ -126,9 +126,6 @@ set grepprg=ack
 nnoremap <leader>a :Ack<space>
 let g:ackhighlight=1
 let g:ackprg="ack -H --type-set jade=.jade --type-set stylus=.styl --type-set coffee=.coffee --nocolor --nogroup --column --ignore-dir=node_modules -G '^((?!min\.).)*$'"
-
-" TagBar
-nnoremap <F8> :TagbarToggle<CR>
 
 " powerline config
 let g:Powerline_symbols = 'fancy'
@@ -164,19 +161,6 @@ nnoremap <leader>t :Vest<cr>
 " VimClojure
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
-
-" GoldenRatio
-let g:loaded_golden_ratio = 1
-
-" RainbowBrackets
-"let g:rainbowbrackets_enable_round_brackets = 1
-"let g:rainbowbrackets_enable_curly_brackets = 1
-"let g:rainbowbrackets_enable_square_brackets = 0
-"let g:rainbowbrackets_enable_angle_brackets = 0
-"augroup vimrc-rainbowbrackets
-"    autocmd!
-"    autocmd FileType javascript let b:rainbowbrackets_enable_curly_brackets = 1
-"augroup END
 
 " Rename file with ,rn ---------------------------- "
 function! RenameFile()
