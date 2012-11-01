@@ -22,9 +22,6 @@
 [submodule "bundle/vest"]
 	path = bundle/vest
 	url = git@github.com:hojberg/vest.git
-[submodule "bundle/syntastic"]
-	path = bundle/syntastic
-	url = git://github.com/scrooloose/syntastic.git
 [submodule "bundle/VimClojure"]
 	path = bundle/VimClojure
 	url = git://github.com/vim-scripts/VimClojure.git
