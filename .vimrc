@@ -16,7 +16,7 @@ set cmdheight=2
 au VimResized * :wincmd =
 
 " Colorcolumn
-set cc=72
+set cc=80
 
 " <leader> ------------------------------------ "
 let mapleader = ","
@@ -51,7 +51,6 @@ nnoremap <leader><space> :noh<cr>
 
 " Mappings ------------------------------------ "
 command! W :w
-:imap jj <Esc>
 :nmap ; :
 
 " Yank to OS X pasteboard.
@@ -59,9 +58,6 @@ noremap <leader>y "*y
 " Paste from OS X pasteboard without messing up indent.
 noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 noremap <leader>P :set paste<CR>:put! *<CR>:set nopaste<CR>
-
-" In command-line mode, C-a jumps to beginning (to match C-e).
-cnoremap <C-a> <Home>
 
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
@@ -162,6 +158,10 @@ nnoremap <leader>t :Vest<cr>
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
 
+" vim-indent-guides
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+
 " Rename file with ,rn ---------------------------- "
 function! RenameFile()
     let old_name = expand('%')
@@ -185,6 +185,10 @@ au InsertLeave * match ExtraWhiteSpace /\s\+$/
 syntax on
 colorscheme mustang
 
+" set background=dark
+hi IndentGuidesOdd  ctermbg=black
+hi IndentGuidesEven ctermbg=black
+
 " gui vim ------------------------------------- "
 if has("gui_running")
   set guioptions=egmrt "" hides toolbar
@@ -195,3 +199,6 @@ else
   " set proper colors for terminal vim
   set t_Co=256
 endif
+
+highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
+match OverLength /\%>80v.\+/

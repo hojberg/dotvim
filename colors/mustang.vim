@@ -46,7 +46,8 @@ hi Statement 	  guifg=#7e8aa2 gui=none ctermfg=103
 hi Keyword		  guifg=#ff9800 gui=none ctermfg=208
 hi Constant 	  guifg=#ff9800 gui=none  ctermfg=208
 hi Number		    guifg=#ff9800 gui=none ctermfg=208
-hi Special		  guifg=#ff9800 gui=none ctermfg=208
+"hi Special		  guifg=#ff9800 gui=none ctermfg=208
+hi Special		  guifg=#ff9800 gui=none ctermfg=250
 hi PreProc 		  guifg=#faf4c6 gui=none ctermfg=230
   
 hi ColorColumn  guibg=black   ctermbg=0 
