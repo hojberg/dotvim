@@ -4,7 +4,7 @@
 
 set background=dark
 
-hi clear
+" hi clear
 
 if exists("syntax_on")
   syntax reset
@@ -49,5 +49,4 @@ hi Number		    guifg=#ff9800 gui=none ctermfg=208
 "hi Special		  guifg=#ff9800 gui=none ctermfg=208
 hi Special		  guifg=#ff9800 gui=none ctermfg=250
 hi PreProc 		  guifg=#faf4c6 gui=none ctermfg=230
-  
-hi ColorColumn  guibg=black   ctermbg=0 
+

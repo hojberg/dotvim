@@ -143,6 +143,9 @@ let g:ctrlp_max_height = 10
 let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
 nnoremap <leader>. :CtrlPTag<cr>
 
+" indentLines
+let g:indentLine_char = '┊'
+
 " ZoomWin configuration
 nnoremap <leader><leader> :ZoomWin<cr>
 
@@ -158,10 +161,6 @@ nnoremap <leader>t :Vest<cr>
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
 
-" vim-indent-guides
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-
 " Rename file with ,rn ---------------------------- "
 function! RenameFile()
     let old_name = expand('%')
@@ -176,6 +175,9 @@ nnoremap <leader>rn :call RenameFile()<cr>
 
 " Highlight end of line whitespace.
 highlight ExtraWhitespace ctermbg=red guibg=red
+hi ColorColumn guibg=black ctermbg=0
+hi Conceal ctermfg=red
+
 au ColorScheme * highlight ExtraWhitespace guibg=red
 au BufEnter * match ExtraWhitespace /\s\+$/
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
@@ -185,20 +187,5 @@ au InsertLeave * match ExtraWhiteSpace /\s\+$/
 syntax on
 colorscheme mustang
 
-" set background=dark
-hi IndentGuidesOdd  ctermbg=black
-hi IndentGuidesEven ctermbg=black
-
-" gui vim ------------------------------------- "
-if has("gui_running")
-  set guioptions=egmrt "" hides toolbar
-  set guifont=Droid\ Sans\ Mono\ Dotted\ for\ Powerline:h18
-  set guioptions-=L
-  set guioptions-=r
-else
-  " set proper colors for terminal vim
-  set t_Co=256
-endif
-
-highlight OverLength ctermbg=darkred ctermfg=white guibg=#FFD9D9
-match OverLength /\%>80v.\+/
+" set proper colors for terminal vim
+set t_Co=256
