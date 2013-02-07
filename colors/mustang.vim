@@ -4,22 +4,15 @@
 
 set background=dark
 
-" hi clear
-
-if exists("syntax_on")
-  syntax reset
-endif
+hi clear
 
 let colors_name = "mustang"
 
-" Vim >= 7.0 specific colors
-if version >= 700
-  hi CursorLine   guibg=#2d2d2d ctermbg=236
-  hi CursorColumn guibg=#000000 ctermbg=0
-  hi MatchParen   guifg=#d0ffc0 guibg=#2f2f2f gui=bold ctermfg=157 ctermbg=237 cterm=bold
-  hi Pmenu 		    guifg=#ffffff guibg=#444444 ctermfg=255 ctermbg=238
-  hi PmenuSel 	  guifg=#000000 guibg=#b1d631 ctermfg=0 ctermbg=148
-endif
+hi CursorLine   guibg=#2d2d2d ctermbg=236
+hi CursorColumn guibg=#000000 ctermbg=0
+hi MatchParen   guifg=#d0ffc0 guibg=#2f2f2f gui=bold ctermfg=157 ctermbg=237 cterm=bold
+hi Pmenu 		    guifg=#ffffff guibg=#444444 ctermfg=255 ctermbg=238
+hi PmenuSel 	  guifg=#000000 guibg=#b1d631 ctermfg=0 ctermbg=148
 
 " General colors
 hi Cursor 		  guifg=NONE    guibg=#626262 gui=none ctermbg=241
@@ -46,7 +39,5 @@ hi Statement 	  guifg=#7e8aa2 gui=none ctermfg=103
 hi Keyword		  guifg=#ff9800 gui=none ctermfg=208
 hi Constant 	  guifg=#ff9800 gui=none  ctermfg=208
 hi Number		    guifg=#ff9800 gui=none ctermfg=208
-"hi Special		  guifg=#ff9800 gui=none ctermfg=208
 hi Special		  guifg=#ff9800 gui=none ctermfg=250
 hi PreProc 		  guifg=#faf4c6 gui=none ctermfg=230
-

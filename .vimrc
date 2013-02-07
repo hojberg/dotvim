@@ -23,8 +23,8 @@ let mapleader = ","
 
 " Whitespace ------------------------------------ "
 set nowrap                      " don't wrap lines
-set tabstop=2 
-set shiftwidth=2     
+set tabstop=2
+set shiftwidth=2
 set softtabstop=2
 set expandtab                   " use spaces, not tabs (optional)
 set backspace=indent,eol,start  " backspace through everything in insert mode
@@ -47,7 +47,7 @@ set incsearch
 set showmatch
 set hlsearch
 " ,<space> clears search
-nnoremap <leader><space> :noh<cr> 
+nnoremap <leader><space> :noh<cr>
 
 " Mappings ------------------------------------ "
 command! W :w
@@ -58,9 +58,6 @@ noremap <leader>y "*y
 " Paste from OS X pasteboard without messing up indent.
 noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 noremap <leader>P :set paste<CR>:put! *<CR>:set nopaste<CR>
-
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
 
 " Navigation ------------------------------------ "
 nnoremap <up> <nop>
@@ -79,17 +76,6 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Line return ------------------------------------ "
-" Make sure Vim returns to the same line when you reopen a file.
-" Thanks, Amit
-augroup line_return
-    au!
-    au BufReadPost *
-        \ if line("'\"") > 0 && line("'\"") <= line("$") |
-        \     execute 'normal! g`"zvzz' |
-        \ endif
-augroup END
-
 " Files ------------------------------------ "
 au BufNewFile,BufRead *.ejs set filetype=html.js
 au BufNewFile,BufRead *.jst set filetype=html.js
@@ -104,26 +90,41 @@ au BufNewFile,BufRead *.clj,*cljs set filetype=clojure
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set noswapfile " no swap files
 
-" Plugins ------------------------------------ "
+" Vundle ------------------------------------ "
+filetype off " required!
 
-filetype plugin indent on " load file type plugins + indentation
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
-" Use pathogen to easily modify the runtime path to include all
-" plugins under the ~/.vim/bundle directory
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
 
-" add local plugins for hacking
-call pathogen#runtime_prepend_subdirectories('/Users/hojberg/code/vim/')
+" Bundles ------------------------------------ "
+Bundle 'tpope/vim-fugitive'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'mileszs/ack.vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'kien/ctrlp.vim'
+Bundle 'pangloss/vim-javascript'
+Bundle 'hojberg/vest'
+Bundle 'VimClojure'
+Bundle 'Yggdroot/indentLine'
+Bundle 'ZoomWin'
+Bundle 'Valloric/YouCompleteMe'
 
+filetype plugin indent on " required!
+
+" Bundle configuration ------------------------------------ "
+"
 " Ack
-" nnoremap <leader>a :Ack
 set grepprg=ack
 nnoremap <leader>a :Ack<space>
 let g:ackhighlight=1
 let g:ackprg="ack -H --type-set jade=.jade --type-set stylus=.styl --type-set coffee=.coffee --nocolor --nogroup --column --ignore-dir=node_modules -G '^((?!min\.).)*$'"
 
-" powerline config
+" Powerline
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_stl_path_style = 'short'
 
@@ -145,13 +146,14 @@ nnoremap <leader>. :CtrlPTag<cr>
 
 " indentLines
 let g:indentLine_char = '┊'
+let g:indentLine_color_term = 232
 
 " ZoomWin configuration
 nnoremap <leader><leader> :ZoomWin<cr>
 
 " Vest
-let g:vest_runners = { 
-  \ '_spec.rb':   'bundle exec rspec %', 
+let g:vest_runners = {
+  \ '_spec.rb':   'bundle exec rspec %',
   \ '.feature':   'bundle exec cucumber %',
   \ '_spec.js':   'grunt jasmine'
   \ }
@@ -173,19 +175,13 @@ function! RenameFile()
 endfunction
 nnoremap <leader>rn :call RenameFile()<cr>
 
-" Highlight end of line whitespace.
-highlight ExtraWhitespace ctermbg=red guibg=red
-hi ColorColumn guibg=black ctermbg=0
-hi Conceal ctermfg=red
-
-au ColorScheme * highlight ExtraWhitespace guibg=red
+" Red whitespace
 au BufEnter * match ExtraWhitespace /\s\+$/
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhiteSpace /\s\+$/
 
 " Color ------------------------------------ "
-syntax on
-colorscheme mustang
-
 " set proper colors for terminal vim
+syntax on
 set t_Co=256
+colorscheme hojberg
