@@ -112,7 +112,9 @@ Bundle 'hojberg/vest'
 Bundle 'VimClojure'
 Bundle 'Yggdroot/indentLine'
 Bundle 'ZoomWin'
-Bundle 'Valloric/YouCompleteMe'
+"Bundle 'Valloric/YouCompleteMe'
+Bundle 'wikitopian/hardmode'
+Bundle 'mattn/gist-vim'
 
 filetype plugin indent on " required!
 
@@ -148,9 +150,6 @@ nnoremap <leader>. :CtrlPTag<cr>
 let g:indentLine_char = '┊'
 let g:indentLine_color_term = 232
 
-" ZoomWin configuration
-nnoremap <leader><leader> :ZoomWin<cr>
-
 " Vest
 let g:vest_runners = {
   \ '_spec.rb':   'bundle exec rspec %',
@@ -162,6 +161,15 @@ nnoremap <leader>t :Vest<cr>
 " VimClojure
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
+
+" Hardmode
+" autocmd VimEnter,BufNewFile,BufReadPost * call HardMode()
+nnoremap <leader>h <Esc>:call EasyMode()<CR>
+nnoremap <leader>H <Esc>:call HardMode()<CR>
+
+" YouCompleteMe
+"let g:ycm_complete_in_comments_and_strings = 1
+"let g:ycm_collect_identifiers_from_comments_and_strings = 1
 
 " Rename file with ,rn ---------------------------- "
 function! RenameFile()

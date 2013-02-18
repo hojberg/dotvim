@@ -113,7 +113,7 @@ call s:HL('Folded', 'mediumgravel', 'bg', 'none')
 call s:HL('VertSplit', 'deepgravel', 'deepergravel', 'none')
 call s:HL('CursorLine',   '', 'darkgravel', 'none')
 call s:HL('CursorColumn', '', 'darkgravel')
-call s:HL('ColorColumn',  '', 'darkgravel')
+call s:HL('ColorColumn',  '', 'blackestgravel')
 call s:HL('MatchParen', 'neon', 'bg', 'bold')
 call s:HL('NonText',    'deepgravel', 'bg')
 call s:HL('SpecialKey', 'deepgravel', 'bg')
@@ -144,7 +144,6 @@ call s:HL('Cursor',  'coal', 'tardis', 'bold')
 call s:HL('vCursor', 'coal', 'tardis', 'bold')
 call s:HL('iCursor', 'coal', 'tardis', 'none')
 
-call s:HL('ColorColumn',      '', 'darkred',  'none')
 call s:HL('ExtraWhitespace',  '', 'taffy',    'none')
 
 " Syntax  ---------------------------------------------------------------------
@@ -217,7 +216,7 @@ call s:HL('DiffText',   'snow', 'deepergravel', 'bold')
 
 " Plugins ---------------------------------------------------------------------
 
-" CtrlP ----- 
+" CtrlP -----
 " the message when no match is found
 call s:HL('CtrlPNoEntries', 'snow', 'taffy', 'bold')
 
@@ -252,7 +251,7 @@ call s:HL('CtrlPStats', 'coal', 'tardis', 'bold')
 " CtrlPUndoBr    : the square brackets [] in undo mode (Comment)
 " CtrlPUndoNr    : the undo number inside [] in undo mode (String)
 
-" EasyMotion ----- 
+" EasyMotion -----
 call s:HL('EasyMotionTarget', 'tardis',     'bg', 'bold')
 call s:HL('EasyMotionShade',  'deepgravel', 'bg')
 
@@ -341,17 +340,17 @@ call s:HL('markdownCodeBlock', 'dirtyblonde', '', 'none')
 call s:HL('mysqlSpecial', 'dress', '', 'bold')
 
 " Vim -----
-call s:HL('VimCommentTitle',  'lightgravel',  '', 'bold') 
+call s:HL('VimCommentTitle',  'lightgravel',  '', 'bold')
 call s:HL('VimMapMod',        'dress',        '', 'none')
 call s:HL('VimMapModKey',     'dress',        '', 'none')
 call s:HL('VimNotation',      'dress',        '', 'none')
 call s:HL('VimBracket',       'dress',        '', 'none')
 
-" JavaScript ----- 
+" JavaScript -----
 call s:HL('javaScriptRegexpString', 'paleyellow')
 call s:HL('javaScriptDocComment', 'lightgravel')
-call s:HL('javaScriptDocTags', 'brightgravel') 
-call s:HL('javaScriptDocType', 'nebula') 
+call s:HL('javaScriptDocTags', 'brightgravel')
+call s:HL('javaScriptDocType', 'nebula')
 call s:HL('javaScriptDocTypeNoParam', 'nebula')
 call s:HL('javaScriptDocParam', 'nebula')
 call s:HL('javaScriptDocSeeTag', 'nebula')
