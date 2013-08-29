@@ -25,7 +25,8 @@ let s:hc.plain = ['e2e2e5', 254]
 
 " Pure and simple.
 let s:hc.snow = ['ffffff', 15]
-let s:hc.coal = ['000000', 16]
+"let s:hc.coal = ['000000', 16]
+let s:hc.coal = ['000000', 0]
 
 let s:hc.brightgravel   = ['d9cec3', 252]
 let s:hc.lightgravel    = ['998f84', 245]
@@ -42,6 +43,7 @@ let s:hc.neon = ['d0ffc0', 193]
 
 " Mustang lime
 let s:hc.lime = ['b1d631', 148]
+let s:hc.moss= ['b1d631', 149]
 
 " The star of the show comes straight from Made of Code.
 let s:hc.tardis = ['0a9dff', 39]
@@ -52,12 +54,8 @@ let s:hc.nebula = ['7e8aa2', 103]
 " A beautiful tan from Tomorrow Night.
 let s:hc.dirtyblonde = ['f4cf86', 222]
 
-" Rose's dress in The Idiot's Lantern.
-let s:hc.dress = ['ff9eb8', 211]
-
 " Delicious, chewy red from Made of Code for the poppiest highlights.
 let s:hc.taffy = ['ff2c4b', 196]
-
 let s:hc.darkred = ['ff2c4b', 52]
 
 " This one's from Mustang, not Florida!
@@ -110,20 +108,21 @@ endfunction
 " UI --------------------------------------------------------------------------
 call s:HL('Normal', 'plain', 'blackgravel')
 call s:HL('Folded', 'mediumgravel', 'bg', 'none')
-call s:HL('VertSplit', 'deepgravel', 'deepergravel', 'none')
+call s:HL('VertSplit', 'coal', 'coal', 'none')
+call s:HL('HorSplit', 'coal', 'coal', 'none')
 call s:HL('CursorLine',   '', 'darkgravel', 'none')
 call s:HL('CursorColumn', '', 'darkgravel')
-call s:HL('ColorColumn',  '', 'blackestgravel')
-call s:HL('MatchParen', 'neon', 'bg', 'bold')
+call s:HL('ColorColumn',  'coal', 'darkgravel')
+call s:HL('MatchParen', 'taffy', 'bg')
 call s:HL('NonText',    'deepgravel', 'bg')
 call s:HL('SpecialKey', 'deepgravel', 'bg')
-call s:HL('Visual',    'snow',  'tardis')
+call s:HL('Visual',    'tardis',  'deepergravel')
 call s:HL('VisualNOS', 'snow',  'tardis')
-call s:HL('Search',    'coal', 'dress', 'none')
-call s:HL('IncSearch', 'coal', 'dress', 'none')
+call s:HL('Search',    'coal', 'tardis', 'bold')
+call s:HL('IncSearch', 'coal', 'tardis', 'bold')
 call s:HL('Underlined', 'fg', '', 'underline')
-call s:HL('StatusLine',   'coal', 'deepergravel', 'bold')
-call s:HL('StatusLineNC', 'snow', 'coal', 'bold')
+call s:HL('StatusLine',   'coal', 'lime', 'bold')
+call s:HL('StatusLineNC', 'coal', 'bg', 'none')
 
 call s:HL('Directory', 'tardis', '', 'bold')
 call s:HL('Title', 'lime')
@@ -132,10 +131,10 @@ call s:HL('ErrorMsg',   'taffy',       'bg', 'bold')
 call s:HL('MoreMsg',    'lime',   '',   'bold')
 call s:HL('ModeMsg',    'dirtyblonde', '',   'bold')
 call s:HL('Question',   'dirtyblonde', '',   'bold')
-call s:HL('WarningMsg', 'dress',       '',   'bold')
+call s:HL('WarningMsg', 'taffy',       '',   'bold')
 
 " Gutter
-call s:HL('LineNr',     'mediumgravel', 'coal')
+call s:HL('LineNr',     'blackestgravel')
 call s:HL('SignColumn', '',             'coal')
 call s:HL('FoldColumn', 'mediumgravel', 'coal')
 
@@ -148,12 +147,12 @@ call s:HL('ExtraWhitespace',  '', 'taffy',    'none')
 
 " Syntax  ---------------------------------------------------------------------
 
-call s:HL('Special', 'plain')
+call s:HL('Special', 'orange')
 
 " Comments are slightly brighter than folds, to make 'headers' easier to see.
-call s:HL('Comment',        'gravel')
+call s:HL('Comment',        'blackestgravel')
 call s:HL('Todo',           'coal', 'paleyellow', 'bold')
-call s:HL('SpecialComment', 'snow', 'bg', 'bold')
+call s:HL('SpecialComment', 'brightgravel', 'bg', 'bold')
 
 call s:HL('String', 'lime')
 
@@ -165,15 +164,9 @@ call s:HL('Operator',    'nebula', '', 'none')
 call s:HL('Label',       'nebula', '', 'none')
 call s:HL('Repeat',      'nebula', '', 'none')
 
-call s:HL('Identifier', 'lime', '', 'none')
+call s:HL('Identifier', 'nebula', '', 'none')
 call s:HL('Function',   'paleyellow', '', 'none')
 
-" Preprocessor stuff is lime, to make it pop.
-"
-" This includes imports in any given language, because they should usually be
-" grouped together at the beginning of a file.  If they're in the middle of some
-" other code they should stand out, because something tricky is
-" probably going on.
 call s:HL('PreProc',   'straw', '', 'none')
 call s:HL('Macro',     'straw', '', 'none')
 call s:HL('Define',    'straw', '', 'none')
@@ -187,13 +180,12 @@ call s:HL('Boolean',   'orange', '', 'none')
 call s:HL('Number',    'orange', '', 'none')
 call s:HL('Float',     'orange', '', 'none')
 
-" Not sure what 'special character in a constant' means, but let's make it pop.
-call s:HL('SpecialChar', 'dress', '', 'none')
+call s:HL('SpecialChar', 'taffy', '', 'none')
 
-call s:HL('Type', 'nebula', '', 'none')
-call s:HL('StorageClass', 'nebula', '', 'none')
-call s:HL('Structure', 'nebula', '', 'none')
-call s:HL('Typedef', 'nebula', '', 'none')
+call s:HL('Type', 'orange', '', 'none')
+call s:HL('StorageClass', 'orange', '', 'none')
+call s:HL('Structure', 'orange', '', 'none')
+call s:HL('Typedef', 'orange', '', 'none')
 
 call s:HL('Exception', 'nebula', '', 'none')
 
@@ -213,6 +205,14 @@ call s:HL('DiffDelete', 'coal', 'coal')
 call s:HL('DiffAdd',    '',     'deepergravel')
 call s:HL('DiffChange', '',     'darkgravel')
 call s:HL('DiffText',   'snow', 'deepergravel', 'bold')
+call s:HL('gitDiff', 'lightgravel', '',)
+call s:HL('diffRemoved', 'taffy', '',)
+call s:HL('diffAdded', 'lime', '',)
+call s:HL('diffFile', 'coal', 'taffy', 'bold')
+call s:HL('diffNewFile', 'coal', 'taffy', 'bold')
+call s:HL('diffLine', 'coal', 'orange', 'bold')
+call s:HL('diffSubname', 'orange', '', 'none')
+
 
 " Plugins ---------------------------------------------------------------------
 
@@ -257,23 +257,6 @@ call s:HL('EasyMotionShade',  'deepgravel', 'bg')
 
 " Filetype Specific -----------------------------------------------------------
 
-" Clojure -----
-call s:HL('clojureSpecial',  'taffy', '', '')
-call s:HL('clojureDefn',     'taffy', '', '')
-call s:HL('clojureDefMacro', 'taffy', '', '')
-call s:HL('clojureDefine',   'taffy', '', '')
-call s:HL('clojureMacro',    'taffy', '', '')
-call s:HL('clojureCond',     'taffy', '', '')
-
-call s:HL('clojureKeyword', 'orange', '', 'none')
-
-call s:HL('clojureFunc',   'dress', '', 'none')
-call s:HL('clojureRepeat', 'dress', '', 'none')
-
-call s:HL('clojureParen0', 'lightgravel', '', 'none')
-
-call s:HL('clojureAnonArg', 'snow', '', 'bold')
-
 " CSS -----
 call s:HL('cssColorProp', 'straw', '', 'none')
 call s:HL('cssBoxProp', 'straw', '', 'none')
@@ -287,20 +270,7 @@ call s:HL('cssIdentifier', 'paleyellow', '', 'bold')
 call s:HL('cssClassName', 'paleyellow', '', 'none')
 
 " LessCSS -----
-call s:HL('lessVariable', 'lime', '', 'none')
-
-" Diff -----
-
-call s:HL('gitDiff', 'lightgravel', '',)
-
-call s:HL('diffRemoved', 'dress', '',)
-call s:HL('diffAdded', 'lime', '',)
-call s:HL('diffFile', 'coal', 'taffy', 'bold')
-call s:HL('diffNewFile', 'coal', 'taffy', 'bold')
-
-call s:HL('diffLine', 'coal', 'orange', 'bold')
-call s:HL('diffSubname', 'orange', '', 'none')
-
+call s:HL('lessVariable', 'orange')
 " HTML ----
 
 " Punctuation
@@ -337,20 +307,21 @@ call s:HL('markdownCode', 'dirtyblonde', '', 'none')
 call s:HL('markdownCodeBlock', 'dirtyblonde', '', 'none')
 
 " MySQL -----
-call s:HL('mysqlSpecial', 'dress', '', 'bold')
+call s:HL('mysqlSpecial', 'taffy', '', 'bold')
 
 " Vim -----
 call s:HL('VimCommentTitle',  'lightgravel',  '', 'bold')
-call s:HL('VimMapMod',        'dress',        '', 'none')
-call s:HL('VimMapModKey',     'dress',        '', 'none')
-call s:HL('VimNotation',      'dress',        '', 'none')
-call s:HL('VimBracket',       'dress',        '', 'none')
+call s:HL('VimMapMod',        'taffy',        '', 'none')
+call s:HL('VimMapModKey',     'taffy',        '', 'none')
+call s:HL('VimNotation',      'taffy',        '', 'none')
+call s:HL('VimBracket',       'taffy',        '', 'none')
 
-" JavaScript -----
-call s:HL('javaScriptRegexpString', 'paleyellow')
-call s:HL('javaScriptDocComment', 'lightgravel')
-call s:HL('javaScriptDocTags', 'brightgravel')
-call s:HL('javaScriptDocType', 'nebula')
-call s:HL('javaScriptDocTypeNoParam', 'nebula')
-call s:HL('javaScriptDocParam', 'nebula')
-call s:HL('javaScriptDocSeeTag', 'nebula')
+" Javascript ------------------------------------------------------------------
+call s:HL('javaScriptDocComment', 'blackestgravel')
+call s:HL('javaScriptDocTags',    'lightgravel')
+call s:HL('javaScriptDocParam',   'lightgravel', '', 'bold')
+call s:HL('javaScriptDocSeeTag',   'snow')
+call s:HL('javaScriptReserved', 'taffy')
+call s:HL('javaScriptOperator', 'orange')
+call s:HL('javaScriptBraces', 'lightgravel')
+call s:HL('javaScriptParens', 'lightgravel')

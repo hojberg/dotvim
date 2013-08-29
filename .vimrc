@@ -21,6 +21,9 @@ nnoremap Q <nop>
 " Colorcolumn
 set cc=80
 
+" don't show things like -- INSERT --
+set noshowmode
+
 " <leader> ------------------------------------ "
 let mapleader = ","
 
@@ -55,6 +58,8 @@ nnoremap <leader><space> :noh<cr>
 " Mappings ------------------------------------ "
 command! W :w
 :nmap ; :
+
+nnoremap <leader>T :!grunt jasmine:all:build && open _SpecRunner.html<cr>
 
 " Yank to OS X pasteboard.
 "noremap <leader>y "*y
@@ -93,6 +98,10 @@ au BufNewFile,BufRead *.clj,*cljs,*.wisp set filetype=clojure
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set noswapfile " no swap files
 
+" Statusline -------------------------------- "
+au InsertEnter * hi statusline ctermfg=0 ctermbg=39
+au InsertLeave * hi statusline ctermfg=0 ctermbg=148
+
 " Vundle ------------------------------------ "
 filetype off " required!
 
@@ -104,35 +113,25 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " Bundles ------------------------------------ "
+
 Bundle 'Lokaltog/vim-easymotion'
-"Bundle 'Lokaltog/vim-powerline'
 Bundle 'tpope/vim-dispatch'
-Bundle 'bling/vim-airline'
+Bundle 'Valloric/YouCompleteMe'
 Bundle 'mileszs/ack.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
-Bundle 'pangloss/vim-javascript'
-Bundle 'hojberg/vest'
-Bundle 'VimClojure'
+Bundle 'jelera/vim-javascript-syntax'
 Bundle 'Yggdroot/indentLine'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'ervandew/supertab'
 Bundle 'tpope/vim-fugitive'
-Bundle 'gregsexton/gitv'
 
 filetype plugin indent on " required!
 
 " Bundle / Plugin configuration ------------------------------------ "
-"
 " Ack
 set grepprg=ack
 nnoremap <leader>a :Ack<space>
 let g:ackhighlight=1
 let g:ackprg="ack -H --type-set less=.less --type-set jade=.jade --type-set handlebars=.handlebars --type-set hbs=.hbs --type-set stylus=.styl --type-set coffee=.coffee --nocolor --nogroup --column --ignore-dir=node_modules -G '^((?!min\.).)*$'"
-
-" Powerline
-let g:Powerline_symbols = 'fancy'
-let g:Powerline_stl_path_style = 'short'
 
 " nerdtree
 let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
@@ -179,44 +178,23 @@ nnoremap <leader>. :CtrlPTag<cr>
 
 " indentLines
 let g:indentLine_char = '┊'
-let g:indentLine_color_term = 232
-
-" Vest
-let g:vest_runners = {
-  \ '_spec.rb':   'bundle exec rspec %',
-  \ '.feature':   'bundle exec cucumber %',
-  \ '.js':        'grunt jasmine'
-  \ }
-" nnoremap <leader>t :Vest<cr>
+let g:indentLine_color_term = 0
 
 " Dispatch
 autocmd FileType ruby let b:dispatch = 'bundle exec rspec %'
 autocmd FileType cucumber let b:dispatch = 'bundle exec cucumber %'
-autocmd FileType javascript let b:dispatch = 'grunt jasmine'
+autocmd FileType javascript let b:dispatch = 'grunt jasmine --no-color'
 nnoremap <leader>t :Dispatch<cr>
-
-" Airline (using vim-powerline patched font symbols)
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'
-let g:airline_right_alt_sep = '⮃'
-let g:airline_fugitive_prefix = '⭠ '
-let g:airline_readonly_symbol = '⭤'
-let g:airline_linecolumn_prefix = '⭡'
-let g:airline_theme='powerlineish'
-
-" VimClojure
-let g:vimclojure#HighlightBuiltins = 1
-let g:vimclojure#ParenRainbow = 1
-
-" Hardmode
-"autocmd VimEnter,BufNewFile,BufReadPost * call HardMode()
+nnoremap <leader>b :Dispatch! grunt bootstrap<cr>
 
 " YouCompleteMe
 let g:ycm_complete_in_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_min_num_of_chars_for_completion = 3
 
-" Rename file with ,rn ---------------------------- "
+" Small functions ----------------------------- "
+
+" Rename file with <leader>rn "
 function! RenameFile()
     let old_name = expand('%')
     let new_name = input('New file name: ', expand('%'), 'file')
