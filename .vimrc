@@ -59,8 +59,6 @@ nnoremap <leader><space> :noh<cr>
 command! W :w
 :nmap ; :
 
-nnoremap <leader>T :!grunt jasmine:all:build && open _SpecRunner.html<cr>
-
 " Yank to OS X pasteboard.
 "noremap <leader>y "*y
 " Paste from OS X pasteboard without messing up indent.
@@ -98,10 +96,6 @@ au BufNewFile,BufRead *.clj,*cljs,*.wisp set filetype=clojure
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set noswapfile " no swap files
 
-" Statusline -------------------------------- "
-au InsertEnter * hi statusline ctermfg=0 ctermbg=39
-au InsertLeave * hi statusline ctermfg=0 ctermbg=148
-
 " Vundle ------------------------------------ "
 filetype off " required!
 
@@ -115,50 +109,47 @@ Bundle 'gmarik/vundle'
 " Bundles ------------------------------------ "
 
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'tpope/vim-dispatch'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'mileszs/ack.vim'
+Bundle 'wting/rust.vim'
+Bundle 'bling/vim-airline'
+Bundle 'benmills/vimux'
+Bundle 'bigfish/vim-js-context-coloring'
 Bundle 'scrooloose/nerdtree'
+Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'rking/ag.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'jelera/vim-javascript-syntax'
 Bundle 'Yggdroot/indentLine'
-Bundle 'tpope/vim-fugitive'
+Bundle 'moll/vim-node'
+Bundle 'VimClojure'
 
 filetype plugin indent on " required!
 
 " Bundle / Plugin configuration ------------------------------------ "
-" Ack
-set grepprg=ack
-nnoremap <leader>a :Ack<space>
-let g:ackhighlight=1
-let g:ackprg="ack -H --type-set less=.less --type-set jade=.jade --type-set handlebars=.handlebars --type-set hbs=.hbs --type-set stylus=.styl --type-set coffee=.coffee --nocolor --nogroup --column --ignore-dir=node_modules -G '^((?!min\.).)*$'"
+
+" vim-airline
+let g:airline_theme='powerlineish'
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+let g:airline_fugitive_prefix = '⭠ '
+let g:airline_readonly_symbol = '⭤'
+let g:airline_linecolumn_prefix = '⭡'
+let g:airline_section_y = ''
+let g:airline_section_x = ''
+
+" Ag
+nnoremap <leader>a :Ag<space>
 
 " nerdtree
 let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
 nnoremap <Leader>n :NERDTreeToggle<CR>
-
-" Experimental custom matcher for CTRLP
-" Based on https://github.com/burke/matcher
-function! BurkeMatcher(items, str, limit, mmode, ispath, crfile, regex)
-  let results = []
-
-  " No search string, just return the list we were passed
-  if len(a:str) == 0
-    let results = a:items[0:(a:limit)]
-
-  " We have a search string
-  else
-    let match_cmd = g:path_to_matcher . ' --limit ' . a:limit . ' --no-dotfiles ' . a:str
-    let results = split(system(match_cmd, join(a:items, "\n")), "\n")
-  endif
-
-  " Exclude current file from results when a:ispath == 1
-  if a:ispath == 1
-    remove(results, index(results, a:crfile))
-  endif
-
-  return results
-endfunction
 
 " Ctrl-P
 let g:ctrlp_dont_split = 'NERD_tree_2'
@@ -168,11 +159,16 @@ let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_window_reversed = 0
 let g:ctrlp_split_window = 0
 let g:ctrlp_max_height = 10
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git|_SpecRunner.html'
 let g:path_to_matcher = "/usr/local/bin/matcher"
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . --cached --other --exclude-standard']
 let g:ctrlp_use_caching = 0
-let g:ctrlp_match_func = { 'match': 'BurkeMatcher' }
+
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
 
 nnoremap <leader>. :CtrlPTag<cr>
 
@@ -180,12 +176,24 @@ nnoremap <leader>. :CtrlPTag<cr>
 let g:indentLine_char = '┊'
 let g:indentLine_color_term = 0
 
-" Dispatch
-autocmd FileType ruby let b:dispatch = 'bundle exec rspec %'
-autocmd FileType cucumber let b:dispatch = 'bundle exec cucumber %'
-autocmd FileType javascript let b:dispatch = 'grunt jasmine --no-color'
-nnoremap <leader>t :Dispatch<cr>
-nnoremap <leader>b :Dispatch! grunt bootstrap<cr>
+" Vimux
+autocmd FileType ruby let b:testRunner = 'bundle exec rspec '.expand("%")
+autocmd FileType cucumber let b:testRunner = 'bundle exec cucumber '.expand("%")
+autocmd FileType javascript let b:testRunner = 'npm test'
+
+noremap <leader>o :call VimuxOpenPane()<CR>
+"nnoremap <Leader>t :call VimuxRunCommand("clear; grunt jasmine:partners")<CR>
+"nnoremap <Leader>t :call VimuxRunCommand("clear; bundle exec rspec ".expand("%"))<CR>
+nnoremap <Leader>t :call VimuxRunCommand(b:testRunner)<CR>
+nnoremap <Leader>b :call VimuxRunCommand("clear; gulp")<CR>
+
+" Goyo
+let g:goyo_width = 150
+nnoremap <Leader>g :Goyo<CR>
+
+" JSContextColor
+let g:js_context_colors_enabled = 0
+nnoremap <Leader>c :JSContextColorToggle<CR>
 
 " YouCompleteMe
 let g:ycm_complete_in_comments_and_strings = 1
