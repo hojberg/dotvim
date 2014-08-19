@@ -59,12 +59,6 @@ nnoremap <leader><space> :noh<cr>
 command! W :w
 :nmap ; :
 
-" Yank to OS X pasteboard.
-"noremap <leader>y "*y
-" Paste from OS X pasteboard without messing up indent.
-"noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
-"noremap <leader>P :set paste<CR>:put! *<CR>:set nopaste<CR>
-
 " Navigation ------------------------------------ "
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -182,10 +176,6 @@ autocmd FileType javascript let b:testRunner = 'npm test'
 nnoremap <Leader>t :call VimuxRunCommand(b:testRunner)<CR>
 nnoremap <Leader>b :call VimuxRunCommand("clear; npm run build")<CR>
 
-" JSContextColor
-let g:js_context_colors_enabled = 0
-nnoremap <Leader>c :JSContextColorToggle<CR>
-
 " YouCompleteMe
 let g:ycm_complete_in_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
@@ -215,15 +205,3 @@ au InsertLeave * match ExtraWhiteSpace /\s\+$/
 syntax on
 set t_Co=256
 colorscheme hojberg
-
-" Show blue blink(1) on insert mode
-function! Blink1On()
-  silent !~/blink1-tool -q --blue
-endfunction
-
-function! Blink1Off()
-  silent !~/blink1-tool -q --off
-endfunction
-
-au InsertEnter * call Blink1On()
-au InsertLeave * call Blink1Off()
