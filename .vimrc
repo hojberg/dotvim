@@ -109,10 +109,8 @@ Bundle 'gmarik/vundle'
 " Bundles ------------------------------------ "
 
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'wting/rust.vim'
 Bundle 'bling/vim-airline'
 Bundle 'benmills/vimux'
-Bundle 'bigfish/vim-js-context-coloring'
 Bundle 'scrooloose/nerdtree'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'Valloric/YouCompleteMe'
@@ -181,15 +179,8 @@ autocmd FileType ruby let b:testRunner = 'bundle exec rspec '.expand("%")
 autocmd FileType cucumber let b:testRunner = 'bundle exec cucumber '.expand("%")
 autocmd FileType javascript let b:testRunner = 'npm test'
 
-noremap <leader>o :call VimuxOpenPane()<CR>
-"nnoremap <Leader>t :call VimuxRunCommand("clear; grunt jasmine:partners")<CR>
-"nnoremap <Leader>t :call VimuxRunCommand("clear; bundle exec rspec ".expand("%"))<CR>
 nnoremap <Leader>t :call VimuxRunCommand(b:testRunner)<CR>
-nnoremap <Leader>b :call VimuxRunCommand("clear; gulp")<CR>
-
-" Goyo
-let g:goyo_width = 150
-nnoremap <Leader>g :Goyo<CR>
+nnoremap <Leader>b :call VimuxRunCommand("clear; npm run build")<CR>
 
 " JSContextColor
 let g:js_context_colors_enabled = 0
