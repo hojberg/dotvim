@@ -325,3 +325,5 @@ call s:HL('javaScriptReserved', 'nebula')
 call s:HL('javaScriptOperator', 'orange')
 call s:HL('javaScriptBraces', 'lightgravel')
 call s:HL('javaScriptParens', 'lightgravel')
+
+highlight SignColumn ctermbg=234

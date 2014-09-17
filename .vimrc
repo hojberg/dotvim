@@ -111,6 +111,7 @@ Bundle 'Valloric/YouCompleteMe'
 Bundle 'rking/ag.vim'
 Bundle 'kien/ctrlp.vim'
 Bundle 'jelera/vim-javascript-syntax'
+Bundle "airblade/vim-gitgutter"
 Bundle 'Yggdroot/indentLine'
 Bundle 'moll/vim-node'
 Bundle 'VimClojure'
@@ -118,6 +119,15 @@ Bundle 'VimClojure'
 filetype plugin indent on " required!
 
 " Bundle / Plugin configuration ------------------------------------ "
+
+" vim-gitgutter
+let g:gitgutter_sign_added = '|'
+let g:gitgutter_sign_modified = '|'
+let g:gitgutter_sign_removed = '|'
+let g:gitgutter_sign_removed_first_line = '|'
+let g:gitgutter_sign_modified_removed = '|'
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
 
 " vim-airline
 let g:airline_theme='powerlineish'
