@@ -104,6 +104,7 @@ Bundle 'gmarik/vundle'
 
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'bling/vim-airline'
+Bundle 'tpope/vim-fugitive'
 Bundle 'benmills/vimux'
 Bundle 'scrooloose/nerdtree'
 Bundle 'christoomey/vim-tmux-navigator'
@@ -178,14 +179,6 @@ nnoremap <leader>. :CtrlPTag<cr>
 let g:indentLine_char = '┊'
 let g:indentLine_color_term = 0
 
-" Vimux
-autocmd FileType ruby let b:testRunner = 'bundle exec rspec '.expand("%")
-autocmd FileType cucumber let b:testRunner = 'bundle exec cucumber '.expand("%")
-autocmd FileType javascript let b:testRunner = 'npm test'
-
-nnoremap <Leader>t :call VimuxRunCommand(b:testRunner)<CR>
-nnoremap <Leader>b :call VimuxRunCommand("clear; npm run build")<CR>
-
 " YouCompleteMe
 let g:ycm_complete_in_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
@@ -205,10 +198,53 @@ function! RenameFile()
 endfunction
 nnoremap <leader>rn :call RenameFile()<cr>
 
+function! RunJSTests()
+  let cwd = getcwd()
+  let cmd = 'npm test'
+
+  if match(expand("%"), '\(._spec.js\|_test.js\)$') != -1
+    let t:test_file = expand("%")
+  endif
+
+  if exists("t:test_file")
+    if filereadable("node_modules/jest-cli/bin/jest.js")
+      if match(cwd, '\<partners_ui\>') != -1
+        let cmd = 'NODE_PATH=build/cjs jest '. t:test_file
+      else
+        let cmd = 'jest '. t:test_file
+      endif
+    endif
+  endif
+
+  :call VimuxRunCommand(cmd)
+endfunction
+nnoremap <Leader>t :call RunJSTests()<CR>
+
+function! RunAllJSTests()
+  :call VimuxRunCommand('npm test')
+endfunction
+nnoremap <Leader>T :call RunAllJSTests()<CR>
+
+function! BuildJS()
+  let cwd = getcwd()
+  if match(cwd, '\<partners_ui\>') != -1
+    :call VimuxRunCommand('clear; npm run devbuild')<CR>
+  else
+    :call VimuxRunCommand('clear; npm run build')<CR>
+  endif
+endfunction
+nnoremap <Leader>b :call BuildJS()<CR>
+
 " Red whitespace
 au BufEnter * match ExtraWhitespace /\s\+$/
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhiteSpace /\s\+$/
+
+function! YuiToEs6()
+  normal $%dGggddVG<
+  %s/var \([^ ]\+\) = imports\[\'\([^\']\+\).*$/import \1 from '\2';
+  w
+endfunction
 
 " Color ------------------------------------ "
 " set proper colors for terminal vim
