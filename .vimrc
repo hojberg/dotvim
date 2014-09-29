@@ -228,9 +228,9 @@ nnoremap <Leader>T :call RunAllJSTests()<CR>
 function! BuildJS()
   let cwd = getcwd()
   if match(cwd, '\<partners_ui\>') != -1
-    :call VimuxRunCommand('clear; npm run devbuild')<CR>
+    call VimuxRunCommand('clear; npm run devbuild')
   else
-    :call VimuxRunCommand('clear; npm run build')<CR>
+    call VimuxRunCommand('clear; npm run build')
   endif
 endfunction
 nnoremap <Leader>b :call BuildJS()<CR>
