@@ -4,6 +4,7 @@ set number
 set history=1000
 set laststatus=2
 set encoding=utf-8
+scriptencoding utf-8
 set showcmd
 set autoread
 set hidden
@@ -13,7 +14,7 @@ set scrolloff=3
 set cmdheight=1
 
 " Resize splits when the window is resized
-au VimResized * :wincmd =
+autocmd VimResized * :wincmd =
 
 " disable Ex mode
 nnoremap Q <nop>
@@ -25,7 +26,7 @@ set cc=80
 set noshowmode
 
 " <leader> ------------------------------------ "
-let mapleader = ","
+let g:mapleader = ","
 
 " Whitespace ------------------------------------ "
 set nowrap                      " don't wrap lines
@@ -58,6 +59,7 @@ nnoremap <leader><space> :noh<cr>
 " Mappings ------------------------------------ "
 command! W :w
 :nmap ; :
+nnoremap <Leader>n :Explore<CR>
 
 " Navigation ------------------------------------ "
 nnoremap <up> <nop>
@@ -77,14 +79,17 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " Files ------------------------------------ "
-au BufNewFile,BufRead *.ejs set filetype=html.js
-au BufNewFile,BufRead *.jst set filetype=html.js
-au BufNewFile,BufRead *.handlebars set filetype=html.js
-au BufNewFile,BufRead *.hbs set filetype=html.js
-au BufNewFile,BufRead *.less set filetype=less
-au BufNewFile,BufRead {Guardfile,Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set filetype=ruby
-au BufNewFile,BufRead *.json set filetype=javascript
-au BufNewFile,BufRead *.clj,*cljs,*.wisp set filetype=clojure
+autocmd BufNewFile,BufRead *.ejs set filetype=html.js
+autocmd BufNewFile,BufRead *.jst set filetype=html.js
+autocmd BufNewFile,BufRead *.handlebars set filetype=html.js
+autocmd BufNewFile,BufRead *.hbs set filetype=html.js
+autocmd BufNewFile,BufRead *.less set filetype=less
+autocmd BufNewFile,BufRead {Guardfile,Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set filetype=ruby
+autocmd BufNewFile,BufRead *.json set filetype=javascript
+autocmd BufNewFile,BufRead *.clj,*cljs,*.wisp set filetype=clojure
+
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
 
 " Backup ------------------------------------ "
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
@@ -94,32 +99,41 @@ set noswapfile " no swap files
 filetype off " required!
 
 set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required!
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-" Bundles ------------------------------------ "
+" Plugin ------------------------------------ "
 
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'bling/vim-airline'
-Bundle 'tpope/vim-fugitive'
-Bundle 'benmills/vimux'
-Bundle 'scrooloose/nerdtree'
-Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'rking/ag.vim'
-Bundle 'kien/ctrlp.vim'
-Bundle 'jelera/vim-javascript-syntax'
-Bundle "airblade/vim-gitgutter"
-Bundle 'Yggdroot/indentLine'
-Bundle 'moll/vim-node'
-Bundle 'VimClojure'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-fugitive'
+Plugin 'benmills/vimux'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'rking/ag.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'jelera/vim-javascript-syntax'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'Yggdroot/indentLine'
+Plugin 'moll/vim-node'
+Plugin 'tpope/vim-obsession'
+Plugin 'VimClojure'
+Plugin 'Keithbsmiley/swift.vim'
+Plugin 'eraserhd/vim-ios'
+Plugin 'ajh17/Spacegray.vim'
+Plugin 'ryanss/vim-hackernews'
+Plugin 'mtth/scratch.vim'
+
+call vundle#end()
 
 filetype plugin indent on " required!
 
-" Bundle / Plugin configuration ------------------------------------ "
+" Plugin configuration ------------------------------------ "
+"
+let g:scratch_filetype = 'markdown'
 
 " vim-gitgutter
 let g:gitgutter_sign_added = '|'
@@ -141,18 +155,14 @@ let g:airline_left_sep = '⮀'
 let g:airline_left_alt_sep = '⮁'
 let g:airline_right_sep = '⮂'
 let g:airline_right_alt_sep = '⮃'
-let g:airline_fugitive_prefix = '⭠ '
-let g:airline_readonly_symbol = '⭤'
-let g:airline_linecolumn_prefix = '⭡'
+let airline_symbols.readonly = '⭤'
+" let g:airline_linecolumn_prefix = '⭡'
+let g:airline_symbols.linenr = '⭡'
 let g:airline_section_y = ''
 let g:airline_section_x = ''
 
 " Ag
 nnoremap <leader>a :Ag<space>
-
-" nerdtree
-let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
-nnoremap <Leader>n :NERDTreeToggle<CR>
 
 " Ctrl-P
 let g:ctrlp_dont_split = 'NERD_tree_2'
@@ -227,24 +237,38 @@ nnoremap <Leader>T :call RunAllJSTests()<CR>
 
 function! BuildJS()
   let cwd = getcwd()
-  if match(cwd, '\<partners_ui\>') != -1
-    call VimuxRunCommand('clear; npm run devbuild')
-  else
-    call VimuxRunCommand('clear; npm run build')
-  endif
+  call VimuxRunCommand('clear; npm run build')
 endfunction
 nnoremap <Leader>b :call BuildJS()<CR>
 
-" Red whitespace
-au BufEnter * match ExtraWhitespace /\s\+$/
-au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-au InsertLeave * match ExtraWhiteSpace /\s\+$/
+augroup ensure_directory_exists
+  autocmd!
+  autocmd BufNewFile * call s:EnsureDirectoryExists()
+augroup END
 
-function! YuiToEs6()
-  normal $%dGggddVG<
-  %s/var \([^ ]\+\) = imports\[\'\([^\']\+\).*$/import \1 from '\2';
-  w
+function! s:EnsureDirectoryExists()
+  let required_dir = expand("%:h")
+
+  if !isdirectory(required_dir)
+    " Remove this if-clause if you don't need the confirmation
+    if !confirm("Directory '" . required_dir . "' doesn't exist. Create it?")
+      return
+    endif
+
+    try
+      call mkdir(required_dir, 'p')
+    catch
+      echoerr "Can't create '" . required_dir . "'"
+    endtry
+  endif
 endfunction
+
+" Misc ------------------------------------ "
+
+" Red whitespace
+autocmd BufEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhiteSpace /\s\+$/
 
 " Color ------------------------------------ "
 " set proper colors for terminal vim

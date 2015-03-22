@@ -316,7 +316,7 @@ call s:HL('VimMapModKey',     'taffy',        '', 'none')
 call s:HL('VimNotation',      'taffy',        '', 'none')
 call s:HL('VimBracket',       'taffy',        '', 'none')
 
-" Javascript ------------------------------------------------------------------
+" JavaScript ------------------------------------------------------------------
 call s:HL('javaScriptDocComment', 'blackestgravel')
 call s:HL('javaScriptDocTags',    'lightgravel')
 call s:HL('javaScriptDocParam',   'lightgravel', '', 'bold')
@@ -325,5 +325,8 @@ call s:HL('javaScriptReserved', 'nebula')
 call s:HL('javaScriptOperator', 'orange')
 call s:HL('javaScriptBraces', 'lightgravel')
 call s:HL('javaScriptParens', 'lightgravel')
+
+" Swift =----------------------------------------------------------------------
+call s:HL('swiftKeywords','nebula')
 
 highlight SignColumn ctermbg=234
