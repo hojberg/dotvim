@@ -25,6 +25,14 @@ set cc=80
 " don't show things like -- INSERT --
 set noshowmode
 
+" https://gist.github.com/chrishunt/6042695
+set clipboard=unnamed
+
+" Use the old vim regex engine (version 1, as opposed to version 2, which was
+" introduced in Vim 7.3.969). The Ruby syntax highlighting is significantly
+" slower with the new regex engine.
+set re=1
+
 " <leader> ------------------------------------ "
 let g:mapleader = ","
 
@@ -59,7 +67,7 @@ nnoremap <leader><space> :noh<cr>
 " Mappings ------------------------------------ "
 command! W :w
 :nmap ; :
-nnoremap <Leader>n :Explore<CR>
+" nnoremap <Leader>n :Explore<CR>
 
 " Navigation ------------------------------------ "
 nnoremap <up> <nop>
@@ -87,53 +95,87 @@ autocmd BufNewFile,BufRead *.less set filetype=less
 autocmd BufNewFile,BufRead {Guardfile,Gemfile,Rakefile,Vagrantfile,Thorfile,config.ru} set filetype=ruby
 autocmd BufNewFile,BufRead *.json set filetype=javascript
 autocmd BufNewFile,BufRead *.clj,*cljs,*.wisp set filetype=clojure
+autocmd BufNewFile,BufRead *.js set filetype=javascript.jsx
 
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
+autocmd BufNewFile,BufRead *.elm set tabstop=4
+" autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+
+" Prettier (js formatter) ------------------- "
+" autocmd FileType javascript set formatprg=prettier\ --stdin --trailing-comma --single-quote
 
 " Backup ------------------------------------ "
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set noswapfile " no swap files
 
-" Vundle ------------------------------------ "
-filetype off " required!
+" vim-plug package manager ------------------- "
+call plug#begin('~/.vim/plugged')
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#begin()
+Plug 'Lokaltog/vim-easymotion'
+Plug 'rakr/vim-one'
+Plug 'tpope/vim-markdown'
+Plug 'vim-scripts/ingo-library'
+Plug 'vim-scripts/SyntaxRange'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimfiler.vim'
+"Plug 'elliottt/vim-haskell'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
+Plug 'junegunn/limelight.vim'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-abolish'
+"Plug 'jszakmeister/vim-togglecursor'
+Plug 'tpope/vim-rsi'
+Plug 'Valloric/YouCompleteMe'
+Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+Plug 'benmills/vimux'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'rking/ag.vim'
+Plug 'kien/ctrlp.vim'
+Plug 'ElmCast/elm-vim'
+Plug 'jelera/vim-javascript-syntax'
+Plug 'airblade/vim-gitgutter'
+Plug 'moll/vim-node'
+Plug 'VimClojure'
+Plug 'ryanss/vim-hackernews'
+Plug 'tpope/vim-surround'
 
-" let Vundle manage Vundle
-" required!
-Plugin 'gmarik/vundle'
-
-" Plugin ------------------------------------ "
-
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'bling/vim-airline'
-Plugin 'tpope/vim-fugitive'
-Plugin 'benmills/vimux'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'rking/ag.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'jelera/vim-javascript-syntax'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'Yggdroot/indentLine'
-Plugin 'moll/vim-node'
-Plugin 'tpope/vim-obsession'
-Plugin 'VimClojure'
-Plugin 'Keithbsmiley/swift.vim'
-Plugin 'eraserhd/vim-ios'
-Plugin 'ajh17/Spacegray.vim'
-Plugin 'ryanss/vim-hackernews'
-Plugin 'mtth/scratch.vim'
-
-call vundle#end()
-
-filetype plugin indent on " required!
+call plug#end()
 
 " Plugin configuration ------------------------------------ "
-"
-let g:scratch_filetype = 'markdown'
+
+let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
+
+" elm-haskell
+let g:hs_highlight_boolean = 1
+let g:hs_highlight_debug = 1
+let g:hs_highlight_types = 1
+let g:hs_highlight_delimiters = 1
+let g:hs_highlight_more_types = 1
+
+" elm-vim
+let g:elm_format_autosave = 1
+let g:elm_setup_keybindings = 0
+
+au FileType elm nmap <leader>m <Plug>(elm-make)
+au FileType elm nmap <leader>M <Plug>(elm-make-main)
+au FileType elm nmap <leader>t <Plug>(elm-test)
+au FileType elm nmap <leader>r <Plug>(elm-repl)
+au FileType elm nmap <leader>e <Plug>(elm-error-detail)
+au FileType elm nmap <leader>d <Plug>(elm-show-docs)
+au FileType elm nmap <leader>D <Plug>(elm-browse-docs)
+
+" vimfiler
+nnoremap <Leader>n :VimFilerExplorer<CR>
+let g:vimfiler_as_default_explorer = 1
+
+" vim-easy-align
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
 " vim-gitgutter
 let g:gitgutter_sign_added = '|'
@@ -144,22 +186,44 @@ let g:gitgutter_sign_modified_removed = '|'
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 
+" limelight
+nmap <silent> gl :Limelight!!<CR>
+xmap gl <Plug>(Limelight)
+
+" Goyo
+nnoremap <leader>g :Goyo<CR>
+
+function! s:goyo_enter()
+  silent !tmux set status off
+  silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  set noshowmode
+  set noshowcmd
+  set scrolloff=999
+  Limelight
+endfunction
+
+function! s:goyo_leave()
+  silent !tmux set status on
+  silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
+  set showmode
+  set showcmd
+  set scrolloff=5
+  Limelight!
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
 " vim-airline
+let g:airline_powerline_fonts = 1
 let g:airline_theme='powerlineish'
+let g:Powerline_symbols = 'fancy'
 
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'
-let g:airline_right_alt_sep = '⮃'
-let airline_symbols.readonly = '⭤'
-" let g:airline_linecolumn_prefix = '⭡'
-let g:airline_symbols.linenr = '⭡'
-let g:airline_section_y = ''
-let g:airline_section_x = ''
+let g:airline_right_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_left_alt_sep= ''
+let g:airline_left_sep = ''
+"let g:airline_theme='one'
 
 " Ag
 nnoremap <leader>a :Ag<space>
@@ -185,16 +249,17 @@ endif
 
 nnoremap <leader>. :CtrlPTag<cr>
 
-" indentLines
-let g:indentLine_char = '┊'
-let g:indentLine_color_term = 0
-
 " YouCompleteMe
 let g:ycm_complete_in_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_min_num_of_chars_for_completion = 3
+let g:ycm_semantic_triggers = {
+     \ 'elm' : ['.'],
+     \}
 
 " Small functions ----------------------------- "
+
+nnoremap <leader>j :%!python -m json.tool<cr>
 
 " Rename file with <leader>rn "
 function! RenameFile()
@@ -208,38 +273,53 @@ function! RenameFile()
 endfunction
 nnoremap <leader>rn :call RenameFile()<cr>
 
+function! RunTests()
+  if match(expand("%"), '\(.js\)$') != -1
+    call RunJSTests()
+  else if match(expand("%"), '\(.elm\)$') != -1
+    call ElmTest()
+  endif
+endfunction
+
 function! RunJSTests()
   let cwd = getcwd()
-  let cmd = 'npm test'
+  let cmd = 'nvm use; npm test'
 
   if match(expand("%"), '\(._spec.js\|_test.js\)$') != -1
     let t:test_file = expand("%")
   endif
 
   if exists("t:test_file")
-    if filereadable("node_modules/jest-cli/bin/jest.js")
-      if match(cwd, '\<partners_ui\>') != -1
-        let cmd = 'NODE_PATH=build/cjs jest '. t:test_file
-      else
-        let cmd = 'jest '. t:test_file
-      endif
+    if filereadable("node_modules/mocha/bin/mocha")
+      let cmd = 'nvm use; mocha ' . t:test_file
     endif
   endif
 
-  :call VimuxRunCommand(cmd)
+  call VimuxRunCommand(cmd)
 endfunction
+
 nnoremap <Leader>t :call RunJSTests()<CR>
 
 function! RunAllJSTests()
-  :call VimuxRunCommand('npm test')
+  call VimuxRunCommand('nvm use; npm test')
 endfunction
 nnoremap <Leader>T :call RunAllJSTests()<CR>
 
+function! BuildProject()
+  "if match(expand("%"), '\(.elm\)$') != -1
+    "call ElmMake()
+  "else
+    if filereadable("package.json")
+      call BuildJS()
+    endif
+  "endif
+endfunction
+nnoremap <Leader>b :call BuildProject()<CR>
+
 function! BuildJS()
   let cwd = getcwd()
-  call VimuxRunCommand('clear; npm run build')
+  call VimuxRunCommand('nvm use; clear; npm run build')
 endfunction
-nnoremap <Leader>b :call BuildJS()<CR>
 
 augroup ensure_directory_exists
   autocmd!
@@ -264,6 +344,7 @@ function! s:EnsureDirectoryExists()
 endfunction
 
 " Misc ------------------------------------ "
+nmap <leader>p :!thyme -d<cr>
 
 " Red whitespace
 autocmd BufEnter * match ExtraWhitespace /\s\+$/
@@ -274,4 +355,5 @@ autocmd InsertLeave * match ExtraWhiteSpace /\s\+$/
 " set proper colors for terminal vim
 syntax on
 set t_Co=256
+
 colorscheme hojberg

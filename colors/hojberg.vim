@@ -25,7 +25,6 @@ let s:hc.plain = ['e2e2e5', 254]
 
 " Pure and simple.
 let s:hc.snow = ['ffffff', 15]
-"let s:hc.coal = ['000000', 16]
 let s:hc.coal = ['000000', 0]
 
 let s:hc.brightgravel   = ['d9cec3', 252]
@@ -43,7 +42,6 @@ let s:hc.neon = ['d0ffc0', 193]
 
 " Mustang lime
 let s:hc.lime = ['b1d631', 148]
-let s:hc.moss= ['b1d631', 149]
 
 " The star of the show comes straight from Made of Code.
 let s:hc.tardis = ['0a9dff', 39]
@@ -56,13 +54,12 @@ let s:hc.dirtyblonde = ['f4cf86', 222]
 
 " Delicious, chewy red from Made of Code for the poppiest highlights.
 let s:hc.taffy = ['ff2c4b', 196]
-let s:hc.darkred = ['ff2c4b', 52]
 
 " This one's from Mustang, not Florida!
 let s:hc.orange = ['ff9800', 208]
 
 " From busybee
-let s:hc.paleyellow = ['ffff00', 11]
+let s:hc.paleyellow = ['fce96b',11]
 let s:hc.straw = ['faf4c6', 230]
 
 " Highlighter -----------------------------------------------------------------
@@ -106,13 +103,11 @@ endfunction
 " THEME =======================================================================
 
 " UI --------------------------------------------------------------------------
-call s:HL('Normal', 'plain', 'blackgravel')
+call s:HL('Normal', 'plain', 'darkgravel')
 call s:HL('Folded', 'mediumgravel', 'bg', 'none')
 call s:HL('VertSplit', 'coal', 'coal', 'none')
 call s:HL('HorSplit', 'coal', 'coal', 'none')
-call s:HL('CursorLine',   '', 'darkgravel', 'none')
-call s:HL('CursorColumn', '', 'darkgravel')
-call s:HL('ColorColumn',  'coal', 'darkgravel')
+call s:HL('ColorColumn',  '', 'blackgravel')
 call s:HL('MatchParen', 'taffy', 'bg')
 call s:HL('NonText',    'deepgravel', 'bg')
 call s:HL('SpecialKey', 'deepgravel', 'bg')
@@ -134,7 +129,7 @@ call s:HL('Question',   'dirtyblonde', '',   'bold')
 call s:HL('WarningMsg', 'taffy',       '',   'bold')
 
 " Gutter
-call s:HL('LineNr',     'blackestgravel')
+call s:HL('LineNr',     'mediumgravel')
 call s:HL('SignColumn', '',             'coal')
 call s:HL('FoldColumn', 'mediumgravel', 'coal')
 
@@ -150,7 +145,7 @@ call s:HL('ExtraWhitespace',  '', 'taffy',    'none')
 call s:HL('Special', 'orange')
 
 " Comments are slightly brighter than folds, to make 'headers' easier to see.
-call s:HL('Comment',        'blackestgravel')
+call s:HL('Comment',        'mediumgravel')
 call s:HL('Todo',           'coal', 'paleyellow', 'bold')
 call s:HL('SpecialComment', 'brightgravel', 'bg', 'bold')
 
@@ -165,7 +160,7 @@ call s:HL('Label',       'nebula', '', 'none')
 call s:HL('Repeat',      'nebula', '', 'none')
 
 call s:HL('Identifier', 'nebula', '', 'none')
-call s:HL('Function',   'paleyellow', '', 'none')
+call s:HL('Function',   'paleyellow', '', 'bold')
 
 call s:HL('PreProc',   'straw', '', 'none')
 call s:HL('Macro',     'straw', '', 'none')
@@ -212,7 +207,6 @@ call s:HL('diffFile', 'coal', 'taffy', 'bold')
 call s:HL('diffNewFile', 'coal', 'taffy', 'bold')
 call s:HL('diffLine', 'coal', 'orange', 'bold')
 call s:HL('diffSubname', 'orange', '', 'none')
-
 
 " Plugins ---------------------------------------------------------------------
 
@@ -271,13 +265,12 @@ call s:HL('cssClassName', 'paleyellow', '', 'none')
 
 " LessCSS -----
 call s:HL('lessVariable', 'orange')
-" HTML ----
 
 " Punctuation
 call s:HL('htmlTag',            'plain', 'bg', 'none')
 call s:HL('htmlEndTag',         'plain', 'bg', 'none')
 call s:HL('htmlTagName',        'plain', '', 'bold')
-call s:HL('htmlSpecialTagName', 'straw', '', 'bold')
+call s:HL('htmlSpecialTagName', 'paleyellow', '', 'bold')
 call s:HL('htmlSpecialChar',    'lime',   '', 'none')
 call s:HL('htmlArg',            'nebula', '', 'none')
 call s:HL('htmlLink',           'tardis', '', 'underline')
@@ -317,7 +310,7 @@ call s:HL('VimNotation',      'taffy',        '', 'none')
 call s:HL('VimBracket',       'taffy',        '', 'none')
 
 " JavaScript ------------------------------------------------------------------
-call s:HL('javaScriptDocComment', 'blackestgravel')
+call s:HL('javaScriptDocComment', 'mediumgravel')
 call s:HL('javaScriptDocTags',    'lightgravel')
 call s:HL('javaScriptDocParam',   'lightgravel', '', 'bold')
 call s:HL('javaScriptDocSeeTag',   'snow')
@@ -326,7 +319,29 @@ call s:HL('javaScriptOperator', 'orange')
 call s:HL('javaScriptBraces', 'lightgravel')
 call s:HL('javaScriptParens', 'lightgravel')
 
+call s:HL('javaScriptTemplateDelim', 'lime')
+call s:HL('javaScriptTemplateVar', 'neon')
+call s:HL('javaScriptTemplateString', 'lime')
+call s:HL('javaScriptObjectKey', 'straw')
+call s:HL('javaScriptFunctionKey', 'straw')
+call s:HL('javaScriptFuncDef', 'straw', '' , 'bold')
+call s:HL('javaScriptFuncArg', 'dirtyblonde')
+
+" XML (JSX) =------------------------------------------------------------------
+call s:HL('jsxRegion','nebula')
+call s:HL('xmlAttrib','straw')
+call s:HL('xmlAttribPunct', 'lightgravel')
+call s:HL('xmlEqual', 'snow')
+call s:HL('xmlString','lime')
+
+call s:HL('xmlTagName', 'paleyellow')
+call s:HL('xmlStartTag', 'paleyellow')
+call s:HL('xmlEndTag', 'paleyellow')
+
 " Swift =----------------------------------------------------------------------
-call s:HL('swiftKeywords','nebula')
+call s:HL('swiftKeywords', 'nebula')
+
+" Haskell =----------------------------------------------------------------------
+call s:HL('haskellType', 'nebula')
 
 highlight SignColumn ctermbg=234

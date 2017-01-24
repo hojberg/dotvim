@@ -1,1 +1,1 @@
-Install bundles with Vundler: `BundleInstall!`
+Install bundles with Vundler: `PluginInstall!`
